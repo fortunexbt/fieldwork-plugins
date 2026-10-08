@@ -1,0 +1,140 @@
+{
+  "dataset_kind": "synthetic",
+  "normalization": "Temporary paths and loopback server ports normalized for publication; not an executable receipt.",
+  "title": "0.10 + 0.20 = exactly 0.30.",
+  "summary": "An exact decimal calculation over synthetic orders. Long order identifiers remain strings, and each group points back to its contributing records.",
+  "stats": [
+    {
+      "label": "Source rows",
+      "value": "3"
+    },
+    {
+      "label": "Groups",
+      "value": "2"
+    },
+    {
+      "label": "Arithmetic",
+      "value": "Exact"
+    }
+  ],
+  "columns": [
+    "Region",
+    "Total",
+    "Source rows"
+  ],
+  "rows": [
+    [
+      "North",
+      "0.3",
+      "2"
+    ],
+    [
+      "South",
+      "12.35",
+      "1"
+    ]
+  ],
+  "receipt": {
+    "schema_version": 1,
+    "tool": "tablebeam",
+    "status": "ok",
+    "summary": "Calculated sum of amount for 3 matching rows: First 2 groups: region=North: 0.3, region=South: 12.35.",
+    "data": {
+      "source": {
+        "filename": "orders.csv"
+      },
+      "query": {
+        "group_by": [
+          "region"
+        ],
+        "aggregate": {
+          "op": "sum",
+          "column": "amount"
+        }
+      },
+      "matched_row_count": 3,
+      "source_coverage": {
+        "matched_row_count": 3,
+        "row_id_ranges": {
+          "ranges": [
+            [
+              1,
+              3
+            ]
+          ],
+          "range_count": 1,
+          "ranges_truncated": false
+        },
+        "source_line_ranges": {
+          "ranges": [
+            [
+              2,
+              4
+            ]
+          ],
+          "range_count": 1,
+          "ranges_truncated": false
+        }
+      },
+      "preview": {
+        "kind": "groups",
+        "limit": 50,
+        "returned": 2,
+        "total": 2,
+        "truncated": false
+      },
+      "aggregate": {
+        "op": "sum",
+        "column": "amount",
+        "group_by": [
+          "region"
+        ]
+      },
+      "result_group_count": 2,
+      "result_rows": [
+        {
+          "group": {
+            "region": "North"
+          },
+          "value": "0.3",
+          "rows": 2,
+          "value_count": 2,
+          "missing_count": 0,
+          "source_row_coverage": {
+            "row_count": 2,
+            "ranges": [
+              [
+                1,
+                2
+              ]
+            ],
+            "range_count": 1,
+            "ranges_truncated": false
+          }
+        },
+        {
+          "group": {
+            "region": "South"
+          },
+          "value": "12.35",
+          "rows": 1,
+          "value_count": 1,
+          "missing_count": 0,
+          "source_row_coverage": {
+            "row_count": 1,
+            "ranges": [
+              [
+                3,
+                3
+              ]
+            ],
+            "range_count": 1,
+            "ranges_truncated": false
+          }
+        }
+      ]
+    },
+    "artifacts": [],
+    "warnings": []
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "dataset_kind": "synthetic",
+  "normalization": "Temporary paths and loopback server ports normalized for publication; not an executable receipt.",
+  "title": "Under the limit. Original preserved.",
+  "summary": "A two-second generated video was one byte over the selected limit. The tool encoded a copy, retained its dimensions and copied the audio stream.",
+  "stats": [
+    {
+      "label": "Output bytes",
+      "value": "125,943"
+    },
+    {
+      "label": "Byte limit",
+      "value": "161,377"
+    },
+    {
+      "label": "Duration",
+      "value": "2.0 s"
+    }
+  ],
+  "columns": [
+    "Check",
+    "Result"
+  ],
+  "rows": [
+    [
+      "Within cap",
+      "True"
+    ],
+    [
+      "Original SHA-256",
+      "Unchanged"
+    ],
+    [
+      "Audio",
+      "Stream copied"
+    ]
+  ],
+  "receipt": {
+    "schema_version": 1,
+    "tool": "fit-to-upload",
+    "status": "ok",
+    "summary": "Verified 125943 byte MP4 under the 161377-byte cap.",
+    "data": {
+      "input": "/private<sample-directory>/sample.mp4",
+      "output": "<sample-directory>/upload.mp4",
+      "receipt": "<sample-directory>/upload.mp4.receipt.json",
+      "operation": "two_pass_h264",
+      "source_bytes": 161378,
+      "actual_bytes": 125943,
+      "max_bytes": 161377,
+      "duration_seconds": 2.0,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 320,
+          "height": 180,
+          "frame_rate": "15/1",
+          "pixel_format": "yuv420p",
+          "bitrate_bps": 395668,
+          "duration_seconds": 2.0
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 44100,
+          "channels": 1,
+          "bitrate_bps": 97124,
+          "duration_seconds": 2.0
+        }
+      ],
+      "fidelity": {
+        "video": "re-encoded as H.264; source dimensions retained; visual quality may decrease",
+        "audio": "copied every source audio track",
+        "duration": "verified within two source frames or 150 ms",
+        "subtitles_and_attachments": "not retained by the MP4 encode"
+      },
+      "video_bitrate_bps": 479023,
+      "validation": {
+        "within_cap": true,
+        "duration_preserved": true,
+        "dimensions_preserved": true,
+        "audio_stream_count": 1
+      }
+    },
+    "artifacts": [
+      {
+        "path": "<sample-directory>/upload.mp4",
+        "label": "Encoded MP4",
+        "media_type": "video/mp4"
+      },
+      {
+        "path": "<sample-directory>/upload.mp4.receipt.json",
+        "label": "Verification receipt",
+        "media_type": "application/json"
+      }
+    ],
+    "warnings": [
+      "Audio is copied when re-encoding; some input audio codecs may not mux into MP4. Retry with --audio aac if ffmpeg rejects the copy."
+    ]
+  },
+  "artifacts": [
+    {
+      "url": "examples/files/fit-to-upload.mp4",
+      "label": "Play the generated output"
+    }
+  ]
+}

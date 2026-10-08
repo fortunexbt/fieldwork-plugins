@@ -1,0 +1,219 @@
+{
+  "name": "fieldwork",
+  "display_name": "Fieldwork",
+  "version": "0.1.0",
+  "publisher": "Fortune",
+  "repository": "https://github.com/fortunexbt/fieldwork-plugins",
+  "website": "https://fortunexbt.github.io/fieldwork-plugins",
+  "plugins": [
+    {
+      "id": "frame-lab",
+      "name": "Minecraft Performance Lab",
+      "short": "Compare frame pacing",
+      "description": "Compare compatible Minecraft frame captures, catch invalid measurements, and inspect a supported local benchmark setup. Inspect frame-time tails and true 1% lows; differing profiles are flagged before a winner is reported. Live capture requires a supported macOS Minecraft installation; saved evidence can be analyzed in an execution-capable environment.",
+      "category": "Gaming",
+      "color": "#28624B",
+      "keywords": [
+        "minecraft",
+        "shaders",
+        "fps",
+        "benchmark"
+      ],
+      "capabilities": [
+        "Analyze frame captures",
+        "Compare measured runs",
+        "Diagnose local setup"
+      ],
+      "prompts": [
+        "Compare these Minecraft captures and show which run is smoother.",
+        "Check whether my Minecraft benchmark results are a fair comparison.",
+        "Help me prepare a supported local Minecraft benchmark."
+      ],
+      "runtime": "Python 3.11+. Live capture: supported macOS Minecraft, Java and Minescript.",
+      "entrypoint": "frame_lab.py"
+    },
+    {
+      "id": "fit-to-upload",
+      "name": "Fit to Upload",
+      "short": "Fit the limit. Keep the moment",
+      "description": "Probe a video, calculate a plan for a chosen file-size limit, and encode a verified copy with FFmpeg. Preserve duration and original files, keep audio when feasible, and see the exact output size and encoding choices. Requires file execution access plus FFmpeg and FFprobe.",
+      "category": "Productivity",
+      "color": "#B14F32",
+      "keywords": [
+        "video",
+        "compression",
+        "upload",
+        "ffmpeg"
+      ],
+      "capabilities": [
+        "Inspect media streams",
+        "Plan size-limited encoding",
+        "Verify output bytes"
+      ],
+      "prompts": [
+        "Make this video fit under 25 MB and preserve the audio if possible.",
+        "Show me a compression plan for this file before encoding it.",
+        "Check whether this video already fits a 500 MB upload limit."
+      ],
+      "runtime": "Python 3.11+, FFmpeg and FFprobe, with access to the selected files.",
+      "entrypoint": "fit_to_upload.py"
+    },
+    {
+      "id": "tablebeam",
+      "name": "Tablebeam",
+      "short": "Exact answers. Source rows.",
+      "description": "Inspect CSV files and answer aggregate, filter and grouping questions with exact decimal arithmetic. Keep long identifiers and raw values intact, inspect the source rows behind an answer, and export reusable results. Calculation runs locally in the execution environment; it does not call an AI provider.",
+      "category": "Data & Analytics",
+      "color": "#325AA0",
+      "keywords": [
+        "csv",
+        "spreadsheet",
+        "decimal",
+        "analysis"
+      ],
+      "capabilities": [
+        "Profile CSV files",
+        "Calculate exact aggregates",
+        "Export source-linked results"
+      ],
+      "prompts": [
+        "Total the amounts in this CSV and show the source rows.",
+        "Group this CSV by category without rounding away precision.",
+        "Check this CSV for missing values and ambiguous numeric columns."
+      ],
+      "runtime": "Python 3.11+ in a file execution environment.",
+      "entrypoint": "tablebeam.py"
+    },
+    {
+      "id": "shipproof",
+      "name": "ShipProof",
+      "short": "Check what actually shipped",
+      "description": "Compare expected release assets and content markers with a supplied live URL. Report matches, stale bytes, missing resources and checks that could not be completed. Prepare a repository handoff with revision and working-tree evidence. HTTP verification does not claim visual or full user-flow validation.",
+      "category": "Developer Tools",
+      "color": "#67519B",
+      "keywords": [
+        "deployment",
+        "release",
+        "verification",
+        "handoff"
+      ],
+      "capabilities": [
+        "Verify served assets",
+        "Check release markers",
+        "Prepare repository handoffs"
+      ],
+      "prompts": [
+        "Check whether this URL serves the release in my build folder.",
+        "Compare the live JavaScript file with my expected SHA-256.",
+        "Create a handoff for this repository without exporting secrets."
+      ],
+      "runtime": "Python 3.11+, network access for URL checks, Git for repository handoffs.",
+      "entrypoint": "shipproof.py"
+    },
+    {
+      "id": "safe-tidy",
+      "name": "Safe Tidy",
+      "short": "Organize with a way back",
+      "description": "Inspect a chosen directory, find byte-identical files, and preview a file organization plan. Apply reviewed moves with a receipt and undo unchanged moves later. Never deletes files or overwrites conflicts. Skips repositories, symlinks and unsupported cloud placeholders rather than treating them as clutter.",
+      "category": "Productivity",
+      "color": "#9C711F",
+      "keywords": [
+        "files",
+        "organization",
+        "duplicates",
+        "undo"
+      ],
+      "capabilities": [
+        "Inspect a selected folder",
+        "Preview file moves",
+        "Undo verified moves"
+      ],
+      "prompts": [
+        "Preview how to organize this folder; keep all the original files.",
+        "Find byte-identical files in this directory without deleting anything.",
+        "Undo the unchanged moves in this Safe Tidy receipt."
+      ],
+      "runtime": "Python 3.11+ with access to the chosen local directory.",
+      "entrypoint": "safe_tidy.py"
+    },
+    {
+      "id": "cad-rescue",
+      "name": "CAD Rescue",
+      "short": "Understand a difficult drawing",
+      "description": "Inspect DXF, SVG and DWG drawings, report layers, units and extents, and create a safe geometry preview. DWG uses a separately installed LibreDWG Web runtime; DXF recovery validates an exported copy while preserving the original. A preview is not a certified CAD repair.",
+      "category": "Design",
+      "color": "#297A88",
+      "keywords": [
+        "cad",
+        "dxf",
+        "dwg",
+        "svg"
+      ],
+      "capabilities": [
+        "Inspect drawing geometry",
+        "Report import problems",
+        "Export a safe preview"
+      ],
+      "prompts": [
+        "Inspect this drawing and show its layers, units and bounds.",
+        "Create a safe preview of this DXF and explain missing geometry.",
+        "Diagnose why this drawing imports at the wrong scale."
+      ],
+      "runtime": "Python 3.11+ and ezdxf. DWG additionally requires Node.js and the documented LibreDWG Web runtime.",
+      "entrypoint": "cad_rescue.py",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "id": "ci-spend-check",
+      "name": "CI Spend Check",
+      "short": "Find repeated CI waste",
+      "description": "Analyze GitHub Actions runs to find repeated failures, cancelled work and long-running workflows. Show the calculations and links behind each recommendation. Runtime is not billed cost; billing estimates require real usage data. This plugin does not disable workflows.",
+      "category": "Developer Tools",
+      "color": "#AF465F",
+      "keywords": [
+        "github",
+        "actions",
+        "ci",
+        "runtime"
+      ],
+      "capabilities": [
+        "Analyze Actions runs",
+        "Rank repeated failure patterns",
+        "Explain runtime totals"
+      ],
+      "prompts": [
+        "Find recurring failures and wasted runtime in these GitHub Actions runs.",
+        "Audit this repository's recent workflow runs without changing settings.",
+        "Show which CI workflows deserve attention and link the evidence."
+      ],
+      "runtime": "Python 3.11+. Live GitHub reads use an already authenticated GitHub CLI.",
+      "entrypoint": "ci_spend_check.py"
+    },
+    {
+      "id": "asset-check",
+      "name": "Asset Check",
+      "short": "Know what your 3D scene costs",
+      "description": "Inspect glTF and GLB exports for geometry counts, textures, materials, external resources and required extensions. Compare the actual asset against explicit budgets and identify missing resources. Reports do not substitute for frame-rate measurements on target devices.",
+      "category": "Design",
+      "color": "#427060",
+      "keywords": [
+        "gltf",
+        "glb",
+        "blender",
+        "3d"
+      ],
+      "capabilities": [
+        "Inspect 3D asset structure",
+        "Check resource budgets",
+        "Identify missing resources"
+      ],
+      "prompts": [
+        "Inspect this GLB before I ship it to the web.",
+        "Check this glTF against a 100,000-triangle and 20 MB budget.",
+        "Find missing textures and unsupported extensions in this 3D export."
+      ],
+      "runtime": "Python 3.11+ with access to the selected glTF/GLB and its local resources.",
+      "entrypoint": "asset_check.py"
+    }
+  ]
+}

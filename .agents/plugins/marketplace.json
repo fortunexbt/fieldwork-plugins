@@ -1,0 +1,104 @@
+{
+  "name": "fieldwork",
+  "interface": {
+    "displayName": "Fieldwork"
+  },
+  "plugins": [
+    {
+      "name": "frame-lab",
+      "source": {
+        "source": "local",
+        "path": "./plugins/frame-lab"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Gaming"
+    },
+    {
+      "name": "fit-to-upload",
+      "source": {
+        "source": "local",
+        "path": "./plugins/fit-to-upload"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "tablebeam",
+      "source": {
+        "source": "local",
+        "path": "./plugins/tablebeam"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Data & Analytics"
+    },
+    {
+      "name": "shipproof",
+      "source": {
+        "source": "local",
+        "path": "./plugins/shipproof"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "safe-tidy",
+      "source": {
+        "source": "local",
+        "path": "./plugins/safe-tidy"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "cad-rescue",
+      "source": {
+        "source": "local",
+        "path": "./plugins/cad-rescue"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Design"
+    },
+    {
+      "name": "ci-spend-check",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ci-spend-check"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "asset-check",
+      "source": {
+        "source": "local",
+        "path": "./plugins/asset-check"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Design"
+    }
+  ]
+}

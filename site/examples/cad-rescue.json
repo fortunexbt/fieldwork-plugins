@@ -1,0 +1,163 @@
+{
+  "dataset_kind": "synthetic",
+  "normalization": "Temporary paths and loopback server ports normalized for publication; not an executable receipt.",
+  "title": "A drawing you can inspect.",
+  "summary": "This generated floor plan contains eight vector entities across three drawing layers. CAD Rescue reports its units and extents, then creates an SVG from the actual geometry.",
+  "stats": [
+    {
+      "label": "Entities",
+      "value": "8"
+    },
+    {
+      "label": "Units",
+      "value": "Meters"
+    },
+    {
+      "label": "Preview paths",
+      "value": "8"
+    }
+  ],
+  "columns": [
+    "Layer",
+    "Entities"
+  ],
+  "rows": [
+    [
+      "Doors",
+      "2"
+    ],
+    [
+      "Furniture",
+      "2"
+    ],
+    [
+      "Walls",
+      "4"
+    ]
+  ],
+  "receipt": {
+    "inspection": {
+      "artifacts": [],
+      "data": {
+        "audit": {
+          "errors": [],
+          "fixes": []
+        },
+        "entity_count": 8,
+        "entity_types": {
+          "ARC": 1,
+          "CIRCLE": 1,
+          "LINE": 4,
+          "LWPOLYLINE": 2
+        },
+        "extents": {
+          "max_x": 12.0,
+          "max_y": 8.0,
+          "max_z": 0.0,
+          "min_x": 0.0,
+          "min_y": 0.0,
+          "min_z": 0.0
+        },
+        "extents_basis": "computed_modelspace_entities",
+        "format": "dxf",
+        "layers": {
+          "Doors": {
+            "entities": 2,
+            "entity_types": {
+              "ARC": 1,
+              "LINE": 1
+            }
+          },
+          "Furniture": {
+            "entities": 2,
+            "entity_types": {
+              "CIRCLE": 1,
+              "LWPOLYLINE": 1
+            }
+          },
+          "Walls": {
+            "entities": 4,
+            "entity_types": {
+              "LINE": 3,
+              "LWPOLYLINE": 1
+            }
+          }
+        },
+        "parser": {
+          "name": "ezdxf",
+          "version": "1.4.4"
+        },
+        "source_file": "sample-plan.dxf",
+        "units": {
+          "code": 6,
+          "name": "Meters",
+          "status": "declared"
+        }
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "summary": "Inspected 8 model-space entities on 3 layers.",
+      "tool": "cad-rescue",
+      "warnings": []
+    },
+    "preview": {
+      "artifacts": [
+        {
+          "label": "Generated vector preview",
+          "media_type": "image/svg+xml",
+          "path": "<sample-directory>/sample-plan.svg"
+        }
+      ],
+      "data": {
+        "expanded_entity_count": 8,
+        "format": "dxf",
+        "paths_written": 8,
+        "preview_extents": {
+          "max_x": 12.0,
+          "max_y": 8.0,
+          "min_x": 0.0,
+          "min_y": 0.0
+        },
+        "preview_kind": "generated_vector_linework",
+        "receipt": {
+          "path": "<sample-directory>/sample-plan.svg",
+          "sha256": "712fb12863dde841800b729500babba41d978e59bfac39240e2503176f83e0b1",
+          "size_bytes": 1799
+        },
+        "source_extents": {
+          "max_x": 12.0,
+          "max_y": 8.0,
+          "max_z": 0.0,
+          "min_x": 0.0,
+          "min_y": 0.0,
+          "min_z": 0.0
+        },
+        "viewbox": {
+          "height": 9.360000000000001,
+          "min_x": -0.24,
+          "min_y": -0.6800000000000004,
+          "width": 12.48
+        }
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "summary": "Created a safe vector preview from the drawing geometry.",
+      "tool": "cad-rescue",
+      "warnings": []
+    }
+  },
+  "preview_image": {
+    "url": "examples/files/cad-rescue.svg",
+    "label": "Generated floor-plan preview"
+  },
+  "artifacts": [
+    {
+      "url": "examples/files/cad-rescue.dxf",
+      "label": "Download the synthetic DXF"
+    },
+    {
+      "url": "examples/files/cad-rescue.svg",
+      "label": "Generated floor-plan preview"
+    }
+  ]
+}

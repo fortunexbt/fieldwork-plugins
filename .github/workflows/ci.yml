@@ -1,17 +1,50 @@
 name: CI
-
 on:
   push:
     branches: [main]
   pull_request:
-
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  smoke:
+  verify:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.13']
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          python-version: "3.12"
-      - run: python -m pip install -r plugins/cad-rescue/skills/cad-rescue/requirements.txt
-      - run: ./scripts/smoke.sh
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: python -m pip install -r requirements-dev.txt
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg librsvg2-bin
+      - name: Verify functional behavior
+        run: python -m unittest discover -s tests -v
+      - name: Smoke-run bundled examples
+        run: ./scripts/smoke.sh
+      - name: Check Python and JavaScript
+        run: |
+          ruff check scripts tests plugins --exclude '**/assets/harness/**' --select F,E9
+          node --check site/app.js
+      - name: Validate distributable metadata
+        run: |
+          python scripts/release.py metadata
+          git diff --exit-code -- plugins .agents/plugins
+          python scripts/check_schema.py
+          python scripts/release.py validate
+      - name: Build independent packages and catalog
+        run: |
+          python scripts/release.py build
+          python scripts/smoke_archives.py
+          python scripts/build_site.py
+          node --check site/app.js
+          git diff --check

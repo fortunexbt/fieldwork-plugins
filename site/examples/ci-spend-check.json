@@ -1,0 +1,135 @@
+{
+  "dataset_kind": "synthetic",
+  "normalization": "Temporary paths and loopback server ports normalized for publication; not an executable receipt.",
+  "title": "Three failures worth investigating.",
+  "summary": "This synthetic history contains repeated build failures. The report shows elapsed and job time separately; no monetary saving is inferred.",
+  "stats": [
+    {
+      "label": "Run attempts",
+      "value": "5"
+    },
+    {
+      "label": "Repeated failures",
+      "value": "3"
+    },
+    {
+      "label": "Job minutes",
+      "value": "45.0"
+    }
+  ],
+  "columns": [
+    "Workflow",
+    "Failures",
+    "Run elapsed"
+  ],
+  "rows": [
+    [
+      "Desktop build",
+      "3",
+      "54.0 min"
+    ],
+    [
+      "Unit tests",
+      "0",
+      "5.0 min"
+    ]
+  ],
+  "receipt": {
+    "schema_version": 1,
+    "tool": "ci-spend-check",
+    "status": "needs_attention",
+    "summary": "Inspected 5 run attempts across 2 workflows; 3 failed attempts need review.",
+    "data": {
+      "runs_analyzed": 5,
+      "available_run_count": 5,
+      "sampled": false,
+      "duplicate_records_ignored": 0,
+      "unknown_run_durations": 0,
+      "unknown_job_durations": 0,
+      "duration_basis": "Run elapsed = run_started_at to updated_at for completed runs. Measured job runtime uses completed job timestamps when supplied. Neither is billed cost.",
+      "billed_cost": null,
+      "workflows": [
+        {
+          "workflow_id": "1",
+          "name": "Desktop build",
+          "runs": 3,
+          "completed_runs": 3,
+          "failed_runs": 3,
+          "cancelled_runs": 0,
+          "successful_runs": 0,
+          "evidence": [
+            {
+              "run_id": 101,
+              "attempt": 1,
+              "status": "completed",
+              "conclusion": "failure",
+              "url": "https://github.com/example/project/actions/runs/101",
+              "elapsed_minutes": 18.0
+            },
+            {
+              "run_id": 102,
+              "attempt": 1,
+              "status": "completed",
+              "conclusion": "failure",
+              "url": "https://github.com/example/project/actions/runs/102",
+              "elapsed_minutes": 18.0
+            },
+            {
+              "run_id": 103,
+              "attempt": 1,
+              "status": "completed",
+              "conclusion": "failure",
+              "url": "https://github.com/example/project/actions/runs/103",
+              "elapsed_minutes": 18.0
+            }
+          ],
+          "run_elapsed_minutes": 54.0,
+          "failed_elapsed_minutes": 54.0,
+          "measured_job_minutes": 45.0,
+          "failure_rate": 1.0,
+          "recommendations": [
+            "Compare the linked failure logs for a repeated cause before changing triggers or disabling the workflow."
+          ]
+        },
+        {
+          "workflow_id": "2",
+          "name": "Unit tests",
+          "runs": 2,
+          "completed_runs": 2,
+          "failed_runs": 0,
+          "cancelled_runs": 1,
+          "successful_runs": 1,
+          "evidence": [
+            {
+              "run_id": 104,
+              "attempt": 1,
+              "status": "completed",
+              "conclusion": "success",
+              "url": "https://github.com/example/project/actions/runs/104",
+              "elapsed_minutes": 4.0
+            },
+            {
+              "run_id": 105,
+              "attempt": 1,
+              "status": "completed",
+              "conclusion": "cancelled",
+              "url": "https://github.com/example/project/actions/runs/105",
+              "elapsed_minutes": 1.0
+            }
+          ],
+          "run_elapsed_minutes": 5.0,
+          "failed_elapsed_minutes": null,
+          "measured_job_minutes": null,
+          "failure_rate": 0.0,
+          "recommendations": [
+            "Check whether cancellations are intentional concurrency replacement; cancellation alone does not prove waste.",
+            "Collect completed job timestamps to separate job runtime from overall run elapsed time."
+          ]
+        }
+      ],
+      "input_sha256": "b455a6ca3addaa4d34fc4cc0292332f2095d9e8e814c547ad75df5984fd4c1e6"
+    },
+    "artifacts": [],
+    "warnings": []
+  }
+}

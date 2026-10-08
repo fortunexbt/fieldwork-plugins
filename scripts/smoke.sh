@@ -2,6 +2,10 @@
 # Runs each plugin's bundled synthetic example end to end and fails on any non-zero exit.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
+python3 -c 'import ezdxf' 2>/dev/null || {
+  echo "ezdxf is missing. Activate the virtual environment from the README Test section, or install plugins/cad-rescue/skills/cad-rescue/requirements.txt." >&2
+  exit 1
+}
 out="$(mktemp -d)"
 trap 'rm -rf "$out"' EXIT
 

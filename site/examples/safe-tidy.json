@@ -1,0 +1,227 @@
+{
+  "dataset_kind": "synthetic",
+  "normalization": "Temporary paths and loopback server ports normalized for publication; not an executable receipt.",
+  "title": "Three moves. A verified way back.",
+  "summary": "The tool organized three generated files, then restored their original names and bytes using its receipt. Duplicate detection never deleted a file.",
+  "stats": [
+    {
+      "label": "Planned moves",
+      "value": "3"
+    },
+    {
+      "label": "Duplicate groups",
+      "value": "1"
+    },
+    {
+      "label": "Restored files",
+      "value": "3"
+    }
+  ],
+  "columns": [
+    "Source",
+    "Planned destination"
+  ],
+  "rows": [
+    [
+      "notes-copy.txt",
+      "txt/notes-copy.txt"
+    ],
+    [
+      "notes.txt",
+      "txt/notes.txt"
+    ],
+    [
+      "totals.csv",
+      "csv/totals.csv"
+    ]
+  ],
+  "receipt": {
+    "inventory": {
+      "artifacts": [],
+      "data": {
+        "bytes_hashed": 56,
+        "duplicate_groups": [
+          {
+            "paths": [
+              "notes-copy.txt",
+              "notes.txt"
+            ],
+            "sha256": "eaade39d1c78e5a3c2d6b31a9478fe97fecf683321bf0521af53f1a80c13b830",
+            "size_bytes": 17
+          }
+        ],
+        "files": [
+          {
+            "file_id": {
+              "device": 16777234,
+              "inode": 178637696,
+              "mode": 420
+            },
+            "path": "notes-copy.txt",
+            "sha256": "eaade39d1c78e5a3c2d6b31a9478fe97fecf683321bf0521af53f1a80c13b830",
+            "size_bytes": 17
+          },
+          {
+            "file_id": {
+              "device": 16777234,
+              "inode": 178637695,
+              "mode": 420
+            },
+            "path": "notes.txt",
+            "sha256": "eaade39d1c78e5a3c2d6b31a9478fe97fecf683321bf0521af53f1a80c13b830",
+            "size_bytes": 17
+          },
+          {
+            "file_id": {
+              "device": 16777234,
+              "inode": 178637697,
+              "mode": 420
+            },
+            "path": "totals.csv",
+            "sha256": "42ffb4e70d930dd4707d8b8fe0ae69227c298d43eec721cb807fb56c007cc01a",
+            "size_bytes": 22
+          }
+        ],
+        "files_scanned": 3,
+        "root": "/private<sample-directory>/inbox",
+        "skipped": [],
+        "warnings": [
+          {
+            "code": "direct_files_only",
+            "message": "Only direct regular files were inspected; subdirectories were not traversed."
+          },
+          {
+            "code": "external_references_not_checked",
+            "message": "Moves do not update playlists, project files, or other path references."
+          }
+        ]
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "summary": "Inspected 3 direct files and found 1 exact-content duplicate groups.",
+      "tool": "safe-tidy",
+      "warnings": [
+        {
+          "code": "direct_files_only",
+          "message": "Only direct regular files were inspected; subdirectories were not traversed."
+        },
+        {
+          "code": "external_references_not_checked",
+          "message": "Moves do not update playlists, project files, or other path references."
+        }
+      ]
+    },
+    "plan": {
+      "artifacts": [
+        {
+          "label": "Organization plan",
+          "media_type": "application/json",
+          "path": "/private<sample-directory>/plan.json"
+        }
+      ],
+      "data": {
+        "conflicts": [],
+        "moves": [
+          {
+            "destination": "txt/notes-copy.txt",
+            "file_id": {
+              "device": 16777234,
+              "inode": 178637696,
+              "mode": 420
+            },
+            "sha256": "eaade39d1c78e5a3c2d6b31a9478fe97fecf683321bf0521af53f1a80c13b830",
+            "size_bytes": 17,
+            "source": "notes-copy.txt"
+          },
+          {
+            "destination": "txt/notes.txt",
+            "file_id": {
+              "device": 16777234,
+              "inode": 178637695,
+              "mode": 420
+            },
+            "sha256": "eaade39d1c78e5a3c2d6b31a9478fe97fecf683321bf0521af53f1a80c13b830",
+            "size_bytes": 17,
+            "source": "notes.txt"
+          },
+          {
+            "destination": "csv/totals.csv",
+            "file_id": {
+              "device": 16777234,
+              "inode": 178637697,
+              "mode": 420
+            },
+            "sha256": "42ffb4e70d930dd4707d8b8fe0ae69227c298d43eec721cb807fb56c007cc01a",
+            "size_bytes": 22,
+            "source": "totals.csv"
+          }
+        ],
+        "plan_sha256": "23169bf82f175c098149b148337624a17e185348901b6e8ad3e3b7bf217a1380",
+        "root": "/private<sample-directory>/inbox",
+        "skipped": []
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "summary": "Prepared 3 proposed moves and 0 destination conflicts for review.",
+      "tool": "safe-tidy",
+      "warnings": [
+        {
+          "code": "direct_files_only",
+          "message": "Only direct regular files were inspected; subdirectories were not traversed."
+        },
+        {
+          "code": "external_references_not_checked",
+          "message": "Moves do not update playlists, project files, or other path references."
+        }
+      ]
+    },
+    "apply": {
+      "artifacts": [
+        {
+          "label": "Undo receipt",
+          "media_type": "application/json",
+          "path": "/private<sample-directory>/receipt.json"
+        }
+      ],
+      "data": {
+        "moves_applied": 3,
+        "plan_sha256": "23169bf82f175c098149b148337624a17e185348901b6e8ad3e3b7bf217a1380",
+        "receipt": "/private<sample-directory>/receipt.json"
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "summary": "Applied 3 reviewed file moves; the receipt can restore their original paths.",
+      "tool": "safe-tidy",
+      "warnings": [
+        {
+          "code": "empty_folders_remain_after_undo",
+          "message": "Undo restores files and leaves any empty extension folders in place."
+        }
+      ]
+    },
+    "undo": {
+      "artifacts": [
+        {
+          "label": "Undo receipt",
+          "media_type": "application/json",
+          "path": "/private<sample-directory>/receipt.json"
+        }
+      ],
+      "data": {
+        "files_already_original": 0,
+        "files_restored": 3,
+        "receipt": "/private<sample-directory>/receipt.json"
+      },
+      "schema_version": 1,
+      "status": "ok",
+      "summary": "Restored 3 files to their original paths; 0 were already there.",
+      "tool": "safe-tidy",
+      "warnings": [
+        {
+          "code": "empty_folders_remain",
+          "message": "Empty extension folders remain after undo."
+        }
+      ]
+    }
+  }
+}
