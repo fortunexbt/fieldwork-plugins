@@ -1,7 +1,7 @@
 {
   "name": "frame-lab",
   "version": "0.1.0",
-  "description": "Compare Minecraft frame captures, catch invalid measurements, and inspect a supported local benchmark setup. See frame-time tails and true 1% lows alongside the settings that produced them. Live capture requires a supported macOS Minecraft installation; saved evidence can be analyzed in an execution-capable environment.",
+  "description": "Compare compatible Minecraft frame captures, catch invalid measurements, and inspect a supported local benchmark setup. Inspect frame-time tails and true 1% lows; differing profiles are flagged before a winner is reported. Live capture requires a supported macOS Minecraft installation; saved evidence can be analyzed in an execution-capable environment.",
   "author": {
     "name": "Fortune",
     "url": "https://github.com/fortunexbt/fieldwork-plugins"
@@ -18,8 +18,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Minecraft Performance Lab",
-    "shortDescription": "Find your smoother setup",
-    "longDescription": "Compare Minecraft frame captures, catch invalid measurements, and inspect a supported local benchmark setup. See frame-time tails and true 1% lows alongside the settings that produced them. Live capture requires a supported macOS Minecraft installation; saved evidence can be analyzed in an execution-capable environment.",
+    "shortDescription": "Compare frame pacing",
+    "longDescription": "Compare compatible Minecraft frame captures, catch invalid measurements, and inspect a supported local benchmark setup. Inspect frame-time tails and true 1% lows; differing profiles are flagged before a winner is reported. Live capture requires a supported macOS Minecraft installation; saved evidence can be analyzed in an execution-capable environment.",
     "developerName": "Fortune",
     "category": "Gaming",
     "capabilities": [

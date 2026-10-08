@@ -1,0 +1,299 @@
+{
+  "dataset_kind": "synthetic",
+  "normalization": "Temporary paths and loopback server ports normalized for publication; not an executable receipt.",
+  "title": "Know the asset before it hits the scene.",
+  "summary": "One synthetic indexed triangle, one embedded texture, and explicit budgets. Counts come from validated structure and accessor ranges; they are not frame-rate predictions.",
+  "stats": [
+    {
+      "label": "Triangle candidates",
+      "value": "1"
+    },
+    {
+      "label": "Asset bytes",
+      "value": "1644"
+    },
+    {
+      "label": "Materials",
+      "value": "1"
+    }
+  ],
+  "columns": [
+    "Budget",
+    "Measured",
+    "Limit",
+    "Result"
+  ],
+  "rows": [
+    [
+      "triangles",
+      "1",
+      "1",
+      "within"
+    ],
+    [
+      "bytes",
+      "1644",
+      "4096",
+      "within"
+    ]
+  ],
+  "receipt": {
+    "schema_version": 1,
+    "tool": "asset-check",
+    "status": "ok",
+    "summary": "Primitives: 1; mesh definitions: 1. Active-scene triangle candidates: 1. Source file: 1644 bytes.",
+    "data": {
+      "source": {
+        "name": "asset-check.gltf",
+        "format": "gltf",
+        "bytes": 1644,
+        "asset_version": "2.0",
+        "generator": "Asset Check synthetic example"
+      },
+      "geometry": {
+        "accessor_count": 2,
+        "mesh_count": 1,
+        "primitive_count": 1,
+        "declared_vertices_in_mesh_primitives": 3,
+        "vertices_in_mesh_primitives": 3,
+        "triangle_candidates_in_mesh_primitives": 1,
+        "topology": {
+          "POINTS": {
+            "primitive_count": 0,
+            "declared_vertices": 0,
+            "element_count": 0,
+            "triangle_candidates": 0,
+            "line_segments": 0,
+            "points": 0,
+            "metric_status": "known"
+          },
+          "LINES": {
+            "primitive_count": 0,
+            "declared_vertices": 0,
+            "element_count": 0,
+            "triangle_candidates": 0,
+            "line_segments": 0,
+            "points": 0,
+            "metric_status": "known"
+          },
+          "LINE_LOOP": {
+            "primitive_count": 0,
+            "declared_vertices": 0,
+            "element_count": 0,
+            "triangle_candidates": 0,
+            "line_segments": 0,
+            "points": 0,
+            "metric_status": "known"
+          },
+          "LINE_STRIP": {
+            "primitive_count": 0,
+            "declared_vertices": 0,
+            "element_count": 0,
+            "triangle_candidates": 0,
+            "line_segments": 0,
+            "points": 0,
+            "metric_status": "known"
+          },
+          "TRIANGLES": {
+            "primitive_count": 1,
+            "declared_vertices": 3,
+            "element_count": 3,
+            "triangle_candidates": 1,
+            "line_segments": 0,
+            "points": 0,
+            "metric_status": "known"
+          },
+          "TRIANGLE_STRIP": {
+            "primitive_count": 0,
+            "declared_vertices": 0,
+            "element_count": 0,
+            "triangle_candidates": 0,
+            "line_segments": 0,
+            "points": 0,
+            "metric_status": "known"
+          },
+          "TRIANGLE_FAN": {
+            "primitive_count": 0,
+            "declared_vertices": 0,
+            "element_count": 0,
+            "triangle_candidates": 0,
+            "line_segments": 0,
+            "points": 0,
+            "metric_status": "known"
+          }
+        },
+        "primitives": [
+          {
+            "mesh_index": 0,
+            "mesh_name": "Triangle sample",
+            "primitive_index": 0,
+            "mode": "TRIANGLES",
+            "mode_value": 4,
+            "position_accessor": 0,
+            "declared_vertex_count": 3,
+            "index_accessor": 1,
+            "element_count": 3,
+            "material_index": 0,
+            "geometry_status": "validated",
+            "vertex_count": 3,
+            "triangle_candidates": 1,
+            "line_segments": 0,
+            "points": 0,
+            "compression": null
+          }
+        ],
+        "accessors": [
+          {
+            "index": 0,
+            "count": 3,
+            "type": "VEC3",
+            "component_type": 5126,
+            "component_name": "FLOAT",
+            "element_bytes": 12,
+            "range_status": "validated"
+          },
+          {
+            "index": 1,
+            "count": 3,
+            "type": "SCALAR",
+            "component_type": 5121,
+            "component_name": "UNSIGNED_BYTE",
+            "element_bytes": 1,
+            "range_status": "validated"
+          }
+        ]
+      },
+      "scene": {
+        "active_scene_index": 0,
+        "active_scene_status": "known",
+        "scenes": [
+          {
+            "index": 0,
+            "name": "Tiny test scene",
+            "reachable_node_count": 1,
+            "mesh_node_count": 1,
+            "mesh_nodes": [
+              {
+                "node_index": 0,
+                "node_name": "One face",
+                "mesh_index": 0,
+                "mesh_name": "Triangle sample",
+                "local_transform_type": "identity",
+                "gpu_instancing": false,
+                "gpu_instance_count": 1,
+                "drawn_mesh_occurrences": 1,
+                "triangle_candidates": 1,
+                "vertices": 3
+              }
+            ],
+            "transforms": [
+              {
+                "node_index": 0,
+                "name": "One face",
+                "type": "identity"
+              }
+            ],
+            "gpu_instance_count": 0,
+            "rendered_mesh_occurrences": 1,
+            "triangle_candidates": 1,
+            "vertices": 3
+          }
+        ],
+        "mesh_nodes_outside_scenes": 0,
+        "transform_note": "Node matrices and TRS affect placement and scale, not cardinality. Scene totals count each reachable mesh node and multiply EXT_mesh_gpu_instancing instances; transforms are reported and are not baked into vertex data."
+      },
+      "materials": {
+        "material_count": 1,
+        "texture_count": 1,
+        "image_count": 1,
+        "texture_use_count": 1,
+        "textures_used_count": 1,
+        "texture_uses": [
+          {
+            "material_index": 0,
+            "material_name": "Blue sample",
+            "slot": "pbrMetallicRoughness.baseColorTexture",
+            "texture_index": 0,
+            "image_index": 0
+          }
+        ]
+      },
+      "file_footprint": {
+        "source_file_bytes": 1644,
+        "external_bytes": 0,
+        "total_asset_bytes": 1644,
+        "external_resource_count": 0,
+        "embedded_buffer_bytes": 39,
+        "external_buffer_bytes": 0,
+        "embedded_image_bytes": 70,
+        "external_image_bytes": 0,
+        "resources": [
+          {
+            "uri": "data:application/octet-stream;base64,[embedded payload omitted]",
+            "storage": "embedded_data_uri",
+            "status": "available",
+            "declared_bytes": 39,
+            "available_bytes": 39,
+            "external_bytes": 0,
+            "diagnostic": null,
+            "kind": "buffer",
+            "index": 0
+          },
+          {
+            "uri": "data:image/png;base64,[embedded payload omitted]",
+            "storage": "embedded_data_uri",
+            "status": "available",
+            "declared_bytes": null,
+            "available_bytes": 70,
+            "external_bytes": 0,
+            "diagnostic": null,
+            "kind": "image",
+            "index": 0
+          }
+        ]
+      },
+      "extensions_used": [],
+      "required_extensions": [],
+      "required_extension_support": [],
+      "budgets": {
+        "triangles": {
+          "limit": 1,
+          "measured": 1,
+          "basis": "active default scene triangle candidates after node and GPU-instance multiplicity",
+          "result": "within"
+        },
+        "bytes": {
+          "limit": 4096,
+          "measured": 1644,
+          "basis": "source file bytes plus unique local external resource files",
+          "result": "within"
+        }
+      },
+      "validation": {
+        "structure": "passed",
+        "resource_completeness": "complete",
+        "decoder_available": false,
+        "geometry_count_basis": "range-checked accessor metadata; index values are not scanned, so triangle totals are candidate primitive counts and may include degenerate faces",
+        "transform_basis": "Node matrices and TRS affect placement and scale, not cardinality. Scene totals count each reachable mesh node and multiply EXT_mesh_gpu_instancing instances; transforms are reported and are not baked into vertex data."
+      }
+    },
+    "artifacts": [
+      {
+        "path": "/private<sample-directory>/asset-check.html",
+        "label": "Asset inspection report",
+        "media_type": "text/html"
+      }
+    ],
+    "warnings": []
+  },
+  "artifacts": [
+    {
+      "url": "examples/files/asset-check.html",
+      "label": "Open the full asset report"
+    },
+    {
+      "url": "examples/files/asset-check.gltf",
+      "label": "Download the synthetic glTF"
+    }
+  ]
+}

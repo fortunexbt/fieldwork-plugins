@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minecraft Frame Lab report</title>
+  <style>
+    :root { color-scheme: light; --ink:#162236; --muted:#63728a; --line:#d9e1ec; --paper:#f4f7fb; --panel:#fff; --navy:#10233c; --blue:#1768ac; --cyan:#00a6a6; --green:#137447; --amber:#875400; --red:#a42e35; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { width:min(1120px,100%); margin:0 auto; padding:clamp(20px,5vw,56px) clamp(16px,4vw,40px) 64px; }
+    .eyebrow { margin:0 0 8px; color:var(--blue); font-size:.76rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+    h1 { margin:0; color:var(--navy); font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.045em; line-height:1.08; }
+    .subtitle { margin:14px 0 28px; color:var(--muted); max-width:70ch; }
+    h2 { margin:0 0 16px; font-size:1.18rem; letter-spacing:-.02em; }
+    .synthetic-banner,.status-banner,.metric-definition,.notice-panel,.chart-panel,.table-panel { border:1px solid var(--line); border-radius:16px; background:var(--panel); }
+    .synthetic-banner { display:grid; gap:2px; margin:0 0 16px; padding:16px 20px; border-color:#e6c678; background:#fff5d9; color:#573b00; }
+    .synthetic-banner strong { font-size:.92rem; } .synthetic-banner span { font-size:.9rem; }
+    .status-banner { display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start; margin:0 0 20px; padding:18px 20px; border-left:5px solid var(--green); }
+    .status-banner.rejected { border-left-color:var(--red); background:#fff5f5; } .status-banner.attention { border-left-color:#c18500; background:#fff9e8; }
+    .status-mark { display:grid; place-items:center; width:30px; height:30px; border-radius:50%; color:white; background:var(--green); font-weight:800; }
+    .rejected .status-mark { background:var(--red); } .attention .status-mark { background:#a56c00; }
+    .status-title { display:block; margin:0 0 2px; font-size:1rem; } .status-detail { color:var(--muted); }
+    .metric-definition { margin:0 0 20px; padding:11px 16px; } .metric-definition p { margin:0; color:var(--muted); font-size:.92rem; }
+    .metric-definition strong { color:var(--ink); }
+    .notice-panel { margin:16px 0; padding:18px 20px; } .notice-panel ul { margin:0; padding-left:22px; } .notice-panel li+li { margin-top:6px; }
+    .rejection-list { border-color:#e8b4b7; background:#fff7f7; } .rejection-list h2 { color:var(--red); }
+    .warning-list { border-color:#e8d39f; background:#fffbef; } .warning-list h2 { color:var(--amber); }
+    .section-head { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:6px 16px; margin:34px 0 12px; }
+    .section-head h2 { margin:0; } .section-head p { margin:0; color:var(--muted); font-size:.88rem; }
+    .chart-panel,.table-panel { overflow:hidden; } .chart-panel { padding:20px; }
+    .legend { display:flex; flex-wrap:wrap; gap:8px 18px; margin:0 0 20px; color:var(--muted); font-size:.88rem; }
+    .legend-item { display:inline-flex; align-items:center; gap:8px; } .swatch { width:11px; height:11px; border-radius:3px; } .swatch.average { background:var(--blue); } .swatch.tail { background:var(--cyan); }
+    .chart-runs { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr)); gap:12px; }
+    .chart-run { min-width:0; padding:16px; border:1px solid var(--line); border-radius:12px; background:#fbfcfe; }
+    .chart-run h3 { overflow-wrap:anywhere; margin:0 0 14px; font-size:.98rem; }
+    .chart-line { display:grid; grid-template-columns:minmax(100px,130px) minmax(60px,1fr) minmax(78px,92px); gap:10px; align-items:center; margin:10px 0; font-size:.85rem; }
+    .chart-label { color:var(--muted); } .track { display:block; width:100%; height:12px; overflow:hidden; border-radius:99px; background:#e8edf4; }
+    .bar { display:block; height:100%; min-width:0; border-radius:inherit; } .bar.average { background:var(--blue); } .bar.tail { background:var(--cyan); }
+    .chart-value { text-align:right; font-variant-numeric:tabular-nums; font-weight:750; white-space:nowrap; }
+    .comparison-note { margin:14px 2px 0; color:var(--muted); font-size:.88rem; } .empty-state { margin:0; color:var(--muted); }
+    .table-scroll { max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; }
+    table { width:100%; min-width:870px; border-collapse:collapse; font-size:.9rem; font-variant-numeric:tabular-nums; }
+    caption { padding:16px 18px 8px; text-align:left; color:var(--muted); } th,td { padding:12px 14px; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap; }
+    thead th { background:#edf2f8; color:#43546e; font-size:.76rem; letter-spacing:.04em; text-transform:uppercase; }
+    tbody th { max-width:220px; overflow:hidden; text-overflow:ellipsis; text-align:left; } tbody tr:last-child th,tbody tr:last-child td { border-bottom:0; }
+    .pill { display:inline-block; padding:3px 9px; border-radius:99px; font-size:.75rem; font-weight:800; } .pill.valid { color:#0e5a37; background:#daf2e5; } .pill.rejected { color:#8b2228; background:#f9dfe1; }
+    .footnote { margin:24px 0 0; color:var(--muted); font-size:.85rem; }
+    @media(max-width:600px) { .chart-panel { padding:14px; } .chart-run { padding:12px; } .chart-line { grid-template-columns:95px minmax(36px,1fr) 76px; gap:7px; font-size:.78rem; } .status-banner { padding:15px; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">Frame Lab · performance report</p>
+    <h1>Minecraft frame production</h1>
+    <p class="subtitle">A review of captured frame intervals, validation checks, and comparable run profiles.</p>
+  </header>
+<aside class="synthetic-banner" role="note"><strong>Synthetic demonstration data</strong><span>These generated values show the report format. They are not Minecraft measurements.</span></aside>
+  <section class="status-banner validated" role="status">
+    <span class="status-mark" aria-hidden="true">✓</span>
+    <span><strong class="status-title">Comparison eligible</strong><span class="status-detail">demo-candidate leads this pair on both average FPS and slowest 1% low.</span></span>
+  </section>
+  <section class="metric-definition">
+    <p><strong>CPU frame-production intervals, including the frame limiter; not GPU execution, displayed frames, generated frames, or input latency.</strong></p>
+  </section>
+
+  <div class="section-head"><h2>FPS comparison</h2><p>Bars share one scale and use the parsed run values.</p></div>
+  <section class="chart-panel">
+    <div class="legend"><span class="legend-item"><span class="swatch average"></span>Average FPS</span><span class="legend-item"><span class="swatch tail"></span>Slowest 1% low FPS</span></div>
+    <div class="chart-runs"><article class="chart-run"><h3>demo-baseline</h3><div class="chart-line"><span class="chart-label">Average FPS</span><span class="track" aria-hidden="true"><span class="bar average" style="width:93.5%"></span></span><span class="chart-value">122.5 FPS</span></div><div class="chart-line"><span class="chart-label">Slowest 1% low FPS</span><span class="track" aria-hidden="true"><span class="bar tail" style="width:38.2%"></span></span><span class="chart-value">50.0 FPS</span></div></article><article class="chart-run"><h3>demo-candidate</h3><div class="chart-line"><span class="chart-label">Average FPS</span><span class="track" aria-hidden="true"><span class="bar average" style="width:100.0%"></span></span><span class="chart-value">131.0 FPS</span></div><div class="chart-line"><span class="chart-label">Slowest 1% low FPS</span><span class="track" aria-hidden="true"><span class="bar tail" style="width:42.4%"></span></span><span class="chart-value">55.6 FPS</span></div></article></div>
+<p class="comparison-note">Bars use each run's parsed FPS values on one shared scale. A leading pair does not estimate run-to-run variation.</p>
+  </section>
+  <div class="section-head"><h2>Frame-time metrics</h2><p>Scroll horizontally to see all columns on narrow screens.</p></div>
+  <section class="table-panel">
+    <div class="table-scroll" role="region" aria-label="Frame-time metrics table" tabindex="0">
+      <table>
+        <caption>Positive frame intervals only. Percentiles use nearest-rank values.</caption>
+        <thead><tr><th scope="col">Run</th><th scope="col">Validation</th><th scope="col">Intervals</th><th scope="col">Average FPS</th><th scope="col">Median</th><th scope="col">p95</th><th scope="col">p99</th><th scope="col">Slowest 1% low FPS</th></tr></thead>
+        <tbody><tr><th scope="row">demo-baseline</th><td><span class="pill valid">Valid</span></td><td>14,700</td><td>122.5 FPS</td><td>8.00 ms</td><td>8.00 ms</td><td>20.00 ms</td><td>50.0 FPS</td></tr><tr><th scope="row">demo-candidate</th><td><span class="pill valid">Valid</span></td><td>15,720</td><td>131.0 FPS</td><td>7.50 ms</td><td>7.50 ms</td><td>18.00 ms</td><td>55.6 FPS</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+<section class="notice-panel warning-list"><h2>Limits and warnings</h2><ul><li>One capture per setup does not estimate run-to-run variation; repeat runs and alternate candidate order.</li><li>The CPU-idle/swap preflight is a point-in-time check and cannot prove that capture-time interference was absent.</li></ul></section>
+  <p class="footnote">Unavailable tail values mean the capture did not contain enough samples. A single run per setup does not establish run-to-run stability.</p>
+</main>
+</body>
+</html>

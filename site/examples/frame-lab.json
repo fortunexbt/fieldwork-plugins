@@ -1,0 +1,185 @@
+{
+  "dataset_kind": "synthetic",
+  "normalization": "Temporary paths and loopback server ports normalized for publication; not an executable receipt.",
+  "title": "Compare the slow frames, too.",
+  "summary": "These generated frame intervals demonstrate the report format. They are not Minecraft performance measurements or a promised improvement.",
+  "stats": [
+    {
+      "label": "Baseline 1% low",
+      "value": "50.0"
+    },
+    {
+      "label": "Candidate 1% low",
+      "value": "55.6"
+    },
+    {
+      "label": "Comparison",
+      "value": "Valid"
+    }
+  ],
+  "columns": [
+    "Synthetic capture",
+    "Average FPS",
+    "p99 frame time"
+  ],
+  "rows": [
+    [
+      "demo-baseline",
+      "122.5",
+      "20.0 ms"
+    ],
+    [
+      "demo-candidate",
+      "131.0",
+      "18.0 ms"
+    ]
+  ],
+  "receipt": {
+    "analysis": {
+      "schema_version": 1,
+      "tool": "frame-lab",
+      "status": "ok",
+      "summary": "Synthetic format demonstration only; it contains no Minecraft measurements.",
+      "data": {
+        "dataset_kind": "synthetic",
+        "summary": "Synthetic format demonstration only; it contains no Minecraft measurements.",
+        "comparison": {
+          "status": "ok",
+          "comparable": true,
+          "baseline_run": "demo-baseline",
+          "runs": [
+            {
+              "run": "demo-baseline",
+              "valid": true,
+              "invalid_reasons": [],
+              "warnings": [],
+              "route_category": "pan",
+              "sampler_hook": "renderFrame",
+              "environment_gate": "passed",
+              "context_present": true,
+              "profile_valid": true,
+              "dataset_kind": "synthetic",
+              "metric_scope": "cpu_frame_production",
+              "metric_limit": "CPU frame-production intervals, including the frame limiter; not GPU execution, displayed frames, generated frames, or input latency.",
+              "summary": "Capture passed validation with 14700 positive frame intervals.",
+              "frame_intervals": 14700,
+              "captured_rows": 14701,
+              "requested_seconds": 120.0,
+              "route_seconds": 120.0,
+              "actual_seconds": 120.0,
+              "average_fps": 122.5,
+              "median_ms": 8.0,
+              "p95_ms": 8.0,
+              "p99_ms": 20.0,
+              "one_percent_low_fps": 50.0,
+              "slowest_one_percent_samples": 147,
+              "stalls_33ms": 0,
+              "stalls_50ms": 0,
+              "stalls_100ms": 0
+            },
+            {
+              "run": "demo-candidate",
+              "valid": true,
+              "invalid_reasons": [],
+              "warnings": [],
+              "route_category": "pan",
+              "sampler_hook": "renderFrame",
+              "environment_gate": "passed",
+              "context_present": true,
+              "profile_valid": true,
+              "dataset_kind": "synthetic",
+              "metric_scope": "cpu_frame_production",
+              "metric_limit": "CPU frame-production intervals, including the frame limiter; not GPU execution, displayed frames, generated frames, or input latency.",
+              "summary": "Capture passed validation with 15720 positive frame intervals.",
+              "frame_intervals": 15720,
+              "captured_rows": 15721,
+              "requested_seconds": 120.0,
+              "route_seconds": 120.0,
+              "actual_seconds": 120.0,
+              "average_fps": 131.0,
+              "median_ms": 7.5,
+              "p95_ms": 7.5,
+              "p99_ms": 18.0,
+              "one_percent_low_fps": 55.55555555555556,
+              "slowest_one_percent_samples": 158,
+              "stalls_33ms": 0,
+              "stalls_50ms": 0,
+              "stalls_100ms": 0
+            }
+          ],
+          "incompatibilities": [],
+          "deltas_from_baseline": {
+            "demo-candidate": {
+              "average_fps": 8.5,
+              "p95_ms": -0.5,
+              "p99_ms": -2.0,
+              "one_percent_low_fps": 5.556
+            }
+          },
+          "preferred_run": "demo-candidate",
+          "interpretation": "dominates_average_and_slowest_one_percent_low",
+          "metric_scope": "cpu_frame_production",
+          "metric_limit": "CPU frame-production intervals, including the frame limiter; not GPU execution, displayed frames, generated frames, or input latency.",
+          "warnings": [
+            "One capture per setup does not estimate run-to-run variation; repeat runs and alternate candidate order.",
+            "The CPU-idle/swap preflight is a point-in-time check and cannot prove that capture-time interference was absent.",
+            "This comparison includes synthetic demonstration data, not a Minecraft measurement."
+          ]
+        }
+      },
+      "artifacts": [],
+      "warnings": [
+        "One capture per setup does not estimate run-to-run variation; repeat runs and alternate candidate order.",
+        "The CPU-idle/swap preflight is a point-in-time check and cannot prove that capture-time interference was absent.",
+        "This comparison includes synthetic demonstration data, not a Minecraft measurement."
+      ]
+    },
+    "export": {
+      "schema_version": 1,
+      "tool": "frame-lab",
+      "status": "ok",
+      "summary": "Portable report created with an input-preservation receipt.",
+      "data": {
+        "status": "ok",
+        "plan": {
+          "action": "create_portable_report",
+          "destination": "<sample-directory>/frame-lab.html",
+          "format": "html",
+          "run_ids": [
+            "demo-baseline",
+            "demo-candidate"
+          ],
+          "bytes": 9764,
+          "sha256": "c3ff7a51b7ad643be7ea2cd3cc644510a30e0a0435a26067a9598638e30cc166",
+          "capture_inputs_modified": false,
+          "overwrite": false
+        },
+        "receipt": {
+          "path": "<sample-directory>/frame-lab.html",
+          "bytes": 9764,
+          "sha256": "c3ff7a51b7ad643be7ea2cd3cc644510a30e0a0435a26067a9598638e30cc166",
+          "run_ids": [
+            "demo-baseline",
+            "demo-candidate"
+          ],
+          "capture_inputs_modified": false
+        },
+        "media_type": "text/html"
+      },
+      "artifacts": [
+        {
+          "path": "<sample-directory>/frame-lab.html",
+          "label": "Portable Minecraft frame report",
+          "media_type": "text/html"
+        }
+      ],
+      "warnings": []
+    }
+  },
+  "artifacts": [
+    {
+      "url": "examples/files/frame-lab.html",
+      "label": "Open the full comparison report"
+    }
+  ]
+}

@@ -35,7 +35,9 @@ plugins/<name>/
   plugin.json            portable manifest
   .codex-plugin/         Codex manifest
   skills/<name>/         SKILL.md, scripts/, synthetic examples in assets/
-scripts/smoke.sh         runs every bundled example
+scripts/                 release tooling and smoke scripts
+tests/                   unit tests
+site/                    catalog site, published to GitHub Pages
 ```
 
 ## Try it
@@ -55,14 +57,36 @@ Fit to Upload needs `ffmpeg` and `ffprobe`.
 
 ## Test
 
+Needs Python 3.11 or later. Homebrew and other system Pythons refuse `pip install`
+outside a virtual environment, so create one first:
+
 ```sh
-python3 -m pip install -r plugins/cad-rescue/skills/cad-rescue/requirements.txt
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements-dev.txt -r plugins/cad-rescue/skills/cad-rescue/requirements.txt
+python -m unittest discover -s tests
 ./scripts/smoke.sh
 ```
 
-The smoke script validates every manifest and runs the bundled synthetic example for
-Frame Lab, Tablebeam, CI Spend Check, Asset Check, CAD Rescue and Safe Tidy. It is not
-a unit-test suite. Fit to Upload and ShipProof need FFmpeg and a live URL respectively and are not covered.
+The 81 unit tests cover all eight plugins and the release tooling. Two are skipped unless
+you set `CAD_RESCUE_DWG_FIXTURE` and `CAD_RESCUE_LIBREDWG_RUNTIME`, or
+`FRAME_LAB_RAW_EVIDENCE`; they need a real DWG file, a LibreDWG runtime or Minecraft
+captures. The Fit to Upload tests need `ffmpeg`, and the CAD Rescue preview tests use
+`rsvg-convert`.
+
+`scripts/smoke.sh` validates every manifest and runs the bundled synthetic example for
+Frame Lab, Tablebeam, CI Spend Check, Asset Check, CAD Rescue and Safe Tidy. Fit to Upload
+and ShipProof need FFmpeg and a live URL and are not covered by it.
+
+CI runs the same tests on Python 3.11 and 3.13, then builds the eight release ZIPs and
+smoke-tests each one from a clean extraction (`python scripts/release.py build`,
+`python scripts/smoke_archives.py`).
+
+## Site
+
+The catalog at https://fortunexbt.github.io/fieldwork-plugins/ is built from `site/` and
+`catalog.json` by `python scripts/build_site.py` and deployed by the Pages workflow on
+each push to `main`.
 
 ## Status
 

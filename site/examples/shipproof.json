@@ -1,0 +1,87 @@
+{
+  "dataset_kind": "synthetic",
+  "normalization": "Temporary paths and loopback server ports normalized for publication; not an executable receipt.",
+  "title": "The served bytes match the release.",
+  "summary": "This example starts a real local HTTP server and verifies its synthetic JavaScript asset. It establishes the byte match; it does not claim a browser user-flow test.",
+  "stats": [
+    {
+      "label": "HTTP status",
+      "value": "200"
+    },
+    {
+      "label": "Asset",
+      "value": "match"
+    },
+    {
+      "label": "Checks",
+      "value": "3"
+    }
+  ],
+  "columns": [
+    "Evidence",
+    "Result"
+  ],
+  "rows": [
+    [
+      "http_status",
+      "match"
+    ],
+    [
+      "sha256",
+      "match"
+    ],
+    [
+      "marker",
+      "match"
+    ]
+  ],
+  "receipt": {
+    "schema_version": 1,
+    "tool": "shipproof",
+    "status": "ok",
+    "summary": "All 1 release resource(s) matched the selected local assets.",
+    "data": {
+      "resources": [
+        {
+          "name": "release asset",
+          "result": "match",
+          "request_url": "http://localhost:PORT/release.js",
+          "final_url": "http://localhost:PORT/release.js",
+          "status_code": 200,
+          "headers": {
+            "content-length": "40",
+            "content-type": "text/javascript",
+            "date": "Wed, 30 Sep 2026 19:19:57 GMT",
+            "last-modified": "Wed, 30 Sep 2026 19:19:57 GMT",
+            "server": "SimpleHTTP/0.6 Python/3.14.7"
+          },
+          "redirects": [],
+          "checks": [
+            {
+              "check": "http_status",
+              "result": "match",
+              "expected": 200,
+              "actual": 200
+            },
+            {
+              "check": "sha256",
+              "result": "match",
+              "expected": "76da9895b2b19db0a58efcae8b3ff3047029bf738d215d55abb93b1bece8efe6",
+              "actual": "76da9895b2b19db0a58efcae8b3ff3047029bf738d215d55abb93b1bece8efe6"
+            },
+            {
+              "check": "marker",
+              "marker": "synthetic-release-1",
+              "result": "match",
+              "expected_asset": "match",
+              "served_response": "match"
+            }
+          ],
+          "reasons": []
+        }
+      ]
+    },
+    "artifacts": [],
+    "warnings": []
+  }
+}
