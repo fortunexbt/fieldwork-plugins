@@ -1,0 +1,43 @@
+{
+  "name": "asset-check",
+  "version": "0.1.0",
+  "description": "Inspect glTF and GLB exports for geometry counts, textures, materials, external resources and required extensions. Compare the actual asset against explicit budgets and identify missing resources. Reports do not substitute for frame-rate measurements on target devices.",
+  "author": {
+    "name": "Fortune",
+    "url": "https://github.com/fortunexbt/fieldwork-plugins"
+  },
+  "homepage": "https://fortunexbt.github.io/fieldwork-plugins/#asset-check",
+  "repository": "https://github.com/fortunexbt/fieldwork-plugins",
+  "license": "MIT",
+  "keywords": [
+    "gltf",
+    "glb",
+    "blender",
+    "3d"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Asset Check",
+    "shortDescription": "Know what your 3D scene costs",
+    "longDescription": "Inspect glTF and GLB exports for geometry counts, textures, materials, external resources and required extensions. Compare the actual asset against explicit budgets and identify missing resources. Reports do not substitute for frame-rate measurements on target devices.",
+    "developerName": "Fortune",
+    "category": "Design",
+    "capabilities": [
+      "Inspect 3D asset structure",
+      "Check resource budgets",
+      "Identify missing resources"
+    ],
+    "websiteURL": "https://fortunexbt.github.io/fieldwork-plugins/#asset-check",
+    "supportURL": "https://fortunexbt.github.io/fieldwork-plugins/support.html",
+    "privacyPolicyURL": "https://fortunexbt.github.io/fieldwork-plugins/privacy.html",
+    "termsOfServiceURL": "https://fortunexbt.github.io/fieldwork-plugins/terms.html",
+    "defaultPrompt": [
+      "Inspect this GLB before I ship it to the web.",
+      "Check this glTF against a 100,000-triangle and 20 MB budget.",
+      "Find missing textures and unsupported extensions in this 3D export."
+    ],
+    "brandColor": "#427060",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg"
+  }
+}

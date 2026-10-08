@@ -1,0 +1,43 @@
+{
+  "name": "ci-spend-check",
+  "version": "0.1.0",
+  "description": "Analyze GitHub Actions runs to find repeated failures, cancelled work and long-running workflows. Show the calculations and links behind each recommendation. Runtime is not billed cost; billing estimates require real usage data. This plugin does not disable workflows.",
+  "author": {
+    "name": "Fortune",
+    "url": "https://github.com/fortunexbt/fieldwork-plugins"
+  },
+  "homepage": "https://fortunexbt.github.io/fieldwork-plugins/#ci-spend-check",
+  "repository": "https://github.com/fortunexbt/fieldwork-plugins",
+  "license": "MIT",
+  "keywords": [
+    "github",
+    "actions",
+    "ci",
+    "runtime"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "CI Spend Check",
+    "shortDescription": "Find repeated CI waste",
+    "longDescription": "Analyze GitHub Actions runs to find repeated failures, cancelled work and long-running workflows. Show the calculations and links behind each recommendation. Runtime is not billed cost; billing estimates require real usage data. This plugin does not disable workflows.",
+    "developerName": "Fortune",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Analyze Actions runs",
+      "Rank repeated failure patterns",
+      "Explain runtime totals"
+    ],
+    "websiteURL": "https://fortunexbt.github.io/fieldwork-plugins/#ci-spend-check",
+    "supportURL": "https://fortunexbt.github.io/fieldwork-plugins/support.html",
+    "privacyPolicyURL": "https://fortunexbt.github.io/fieldwork-plugins/privacy.html",
+    "termsOfServiceURL": "https://fortunexbt.github.io/fieldwork-plugins/terms.html",
+    "defaultPrompt": [
+      "Find recurring failures and wasted runtime in these GitHub Actions runs.",
+      "Audit this repository's recent workflow runs without changing settings.",
+      "Show which CI workflows deserve attention and link the evidence."
+    ],
+    "brandColor": "#AF465F",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg"
+  }
+}

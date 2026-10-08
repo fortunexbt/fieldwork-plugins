@@ -1,0 +1,43 @@
+{
+  "name": "shipproof",
+  "version": "0.1.0",
+  "description": "Compare expected release assets and content markers with a supplied live URL. Report matches, stale bytes, missing resources and checks that could not be completed. Prepare a repository handoff with revision and working-tree evidence. HTTP verification does not claim visual or full user-flow validation.",
+  "author": {
+    "name": "Fortune",
+    "url": "https://github.com/fortunexbt/fieldwork-plugins"
+  },
+  "homepage": "https://fortunexbt.github.io/fieldwork-plugins/#shipproof",
+  "repository": "https://github.com/fortunexbt/fieldwork-plugins",
+  "license": "MIT",
+  "keywords": [
+    "deployment",
+    "release",
+    "verification",
+    "handoff"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "ShipProof",
+    "shortDescription": "Check what actually shipped",
+    "longDescription": "Compare expected release assets and content markers with a supplied live URL. Report matches, stale bytes, missing resources and checks that could not be completed. Prepare a repository handoff with revision and working-tree evidence. HTTP verification does not claim visual or full user-flow validation.",
+    "developerName": "Fortune",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Verify served assets",
+      "Check release markers",
+      "Prepare repository handoffs"
+    ],
+    "websiteURL": "https://fortunexbt.github.io/fieldwork-plugins/#shipproof",
+    "supportURL": "https://fortunexbt.github.io/fieldwork-plugins/support.html",
+    "privacyPolicyURL": "https://fortunexbt.github.io/fieldwork-plugins/privacy.html",
+    "termsOfServiceURL": "https://fortunexbt.github.io/fieldwork-plugins/terms.html",
+    "defaultPrompt": [
+      "Check whether this URL serves the release in my build folder.",
+      "Compare the live JavaScript file with my expected SHA-256.",
+      "Create a handoff for this repository without exporting secrets."
+    ],
+    "brandColor": "#67519B",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg"
+  }
+}

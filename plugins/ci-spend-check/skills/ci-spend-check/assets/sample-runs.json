@@ -1,0 +1,10 @@
+{
+  "total_count": 5,
+  "workflow_runs": [
+    {"id": 101,"run_attempt": 1,"workflow_id": 1,"name": "Desktop build","status": "completed","conclusion": "failure","run_started_at": "2026-01-01T10:00:00Z","updated_at": "2026-01-01T10:18:00Z","html_url": "https://github.com/example/project/actions/runs/101","jobs": [{"id": 1001,"status": "completed","conclusion": "failure","started_at": "2026-01-01T10:01:00Z","completed_at": "2026-01-01T10:16:00Z"}]},
+    {"id": 102,"run_attempt": 1,"workflow_id": 1,"name": "Desktop build","status": "completed","conclusion": "failure","run_started_at": "2026-01-02T10:00:00Z","updated_at": "2026-01-02T10:18:00Z","html_url": "https://github.com/example/project/actions/runs/102","jobs": [{"id": 1002,"status": "completed","conclusion": "failure","started_at": "2026-01-02T10:01:00Z","completed_at": "2026-01-02T10:16:00Z"}]},
+    {"id": 103,"run_attempt": 1,"workflow_id": 1,"name": "Desktop build","status": "completed","conclusion": "failure","run_started_at": "2026-01-03T10:00:00Z","updated_at": "2026-01-03T10:18:00Z","html_url": "https://github.com/example/project/actions/runs/103","jobs": [{"id": 1003,"status": "completed","conclusion": "failure","started_at": "2026-01-03T10:01:00Z","completed_at": "2026-01-03T10:16:00Z"}]},
+    {"id": 104,"run_attempt": 1,"workflow_id": 2,"name": "Unit tests","status": "completed","conclusion": "success","run_started_at": "2026-01-03T11:00:00Z","updated_at": "2026-01-03T11:04:00Z","html_url": "https://github.com/example/project/actions/runs/104"},
+    {"id": 105,"run_attempt": 1,"workflow_id": 2,"name": "Unit tests","status": "completed","conclusion": "cancelled","run_started_at": "2026-01-03T12:00:00Z","updated_at": "2026-01-03T12:01:00Z","html_url": "https://github.com/example/project/actions/runs/105"}
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "fit-to-upload",
+  "version": "0.1.0",
+  "description": "Probe a video, calculate a plan for a chosen file-size limit, and encode a verified copy with FFmpeg. Preserve duration and original files, keep audio when feasible, and see the exact output size and encoding choices. Requires file execution access plus FFmpeg and FFprobe.",
+  "author": {
+    "name": "Fortune",
+    "url": "https://github.com/fortunexbt/fieldwork-plugins"
+  },
+  "homepage": "https://fortunexbt.github.io/fieldwork-plugins/#fit-to-upload",
+  "repository": "https://github.com/fortunexbt/fieldwork-plugins",
+  "license": "MIT",
+  "keywords": [
+    "video",
+    "compression",
+    "upload",
+    "ffmpeg"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Fit to Upload",
+    "shortDescription": "Fit the limit. Keep the moment",
+    "longDescription": "Probe a video, calculate a plan for a chosen file-size limit, and encode a verified copy with FFmpeg. Preserve duration and original files, keep audio when feasible, and see the exact output size and encoding choices. Requires file execution access plus FFmpeg and FFprobe.",
+    "developerName": "Fortune",
+    "category": "Productivity",
+    "capabilities": [
+      "Inspect media streams",
+      "Plan size-limited encoding",
+      "Verify output bytes"
+    ],
+    "websiteURL": "https://fortunexbt.github.io/fieldwork-plugins/#fit-to-upload",
+    "supportURL": "https://fortunexbt.github.io/fieldwork-plugins/support.html",
+    "privacyPolicyURL": "https://fortunexbt.github.io/fieldwork-plugins/privacy.html",
+    "termsOfServiceURL": "https://fortunexbt.github.io/fieldwork-plugins/terms.html",
+    "defaultPrompt": [
+      "Make this video fit under 25 MB and preserve the audio if possible.",
+      "Show me a compression plan for this file before encoding it.",
+      "Check whether this video already fits a 500 MB upload limit."
+    ],
+    "brandColor": "#B14F32",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg"
+  }
+}

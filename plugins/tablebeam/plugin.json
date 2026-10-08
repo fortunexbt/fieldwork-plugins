@@ -1,0 +1,48 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "tablebeam",
+  "version": "0.1.0",
+  "description": "Inspect CSV files and answer aggregate, filter and grouping questions with exact decimal arithmetic. Keep long identifiers and raw values intact, inspect the source rows behind an answer, and export reusable results. Calculation runs locally in the execution environment; it does not call an AI provider.",
+  "author": {
+    "name": "Fortune",
+    "url": "https://github.com/fortunexbt/fieldwork-plugins"
+  },
+  "homepage": "https://fortunexbt.github.io/fieldwork-plugins/#tablebeam",
+  "repository": "https://github.com/fortunexbt/fieldwork-plugins",
+  "license": "MIT",
+  "keywords": [
+    "csv",
+    "spreadsheet",
+    "decimal",
+    "analysis"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Tablebeam",
+        "shortDescription": "Exact answers. Source rows.",
+        "longDescription": "Inspect CSV files and answer aggregate, filter and grouping questions with exact decimal arithmetic. Keep long identifiers and raw values intact, inspect the source rows behind an answer, and export reusable results. Calculation runs locally in the execution environment; it does not call an AI provider.",
+        "developerName": "Fortune",
+        "category": "Data & Analytics",
+        "capabilities": [
+          "Profile CSV files",
+          "Calculate exact aggregates",
+          "Export source-linked results"
+        ],
+        "websiteURL": "https://fortunexbt.github.io/fieldwork-plugins/#tablebeam",
+        "supportURL": "https://fortunexbt.github.io/fieldwork-plugins/support.html",
+        "privacyPolicyURL": "https://fortunexbt.github.io/fieldwork-plugins/privacy.html",
+        "termsOfServiceURL": "https://fortunexbt.github.io/fieldwork-plugins/terms.html",
+        "defaultPrompt": [
+          "Total the amounts in this CSV and show the source rows.",
+          "Group this CSV by category without rounding away precision.",
+          "Check this CSV for missing values and ambiguous numeric columns."
+        ],
+        "brandColor": "#325AA0",
+        "composerIcon": "./assets/icon.svg",
+        "logo": "./assets/icon.svg"
+      },
+      "onboardingSkill": "./skills/tablebeam/SKILL.md"
+    }
+  }
+}
