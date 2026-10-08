@@ -1,0 +1,7 @@
+from minescript import JavaClass,echo
+mc=JavaClass('net.minecraft.client.Minecraft').getInstance()
+echo('M4 effective inactive policy: '+str(mc.options.inactivityFpsLimit().get()))
+echo('M4 effective throttle reason: '+str(mc.getFramerateLimitTracker().getThrottleReason()))
+echo('M4 effective current frame limit: '+str(mc.getFramerateLimitTracker().getFramerateLimit()))
+echo('M4 framebuffer pixels: '+str(mc.getWindow().getWidth())+'x'+str(mc.getWindow().getHeight()))
+echo('M4 window points: '+str(mc.getWindow().getScreenWidth())+'x'+str(mc.getWindow().getScreenHeight()))

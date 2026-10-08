@@ -1,0 +1,48 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "cad-rescue",
+  "version": "0.1.0",
+  "description": "Inspect DXF, SVG and DWG drawings, report layers, units and extents, and create a safe geometry preview. DWG uses a separately installed LibreDWG Web runtime; DXF recovery validates an exported copy while preserving the original. A preview is not a certified CAD repair.",
+  "author": {
+    "name": "Fortune",
+    "url": "https://github.com/fortunexbt/fieldwork-plugins"
+  },
+  "homepage": "https://fortunexbt.github.io/fieldwork-plugins/#cad-rescue",
+  "repository": "https://github.com/fortunexbt/fieldwork-plugins",
+  "license": "GPL-3.0-only",
+  "keywords": [
+    "cad",
+    "dxf",
+    "dwg",
+    "svg"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "CAD Rescue",
+        "shortDescription": "Understand a difficult drawing",
+        "longDescription": "Inspect DXF, SVG and DWG drawings, report layers, units and extents, and create a safe geometry preview. DWG uses a separately installed LibreDWG Web runtime; DXF recovery validates an exported copy while preserving the original. A preview is not a certified CAD repair.",
+        "developerName": "Fortune",
+        "category": "Design",
+        "capabilities": [
+          "Inspect drawing geometry",
+          "Report import problems",
+          "Export a safe preview"
+        ],
+        "websiteURL": "https://fortunexbt.github.io/fieldwork-plugins/#cad-rescue",
+        "supportURL": "https://fortunexbt.github.io/fieldwork-plugins/support.html",
+        "privacyPolicyURL": "https://fortunexbt.github.io/fieldwork-plugins/privacy.html",
+        "termsOfServiceURL": "https://fortunexbt.github.io/fieldwork-plugins/terms.html",
+        "defaultPrompt": [
+          "Inspect this drawing and show its layers, units and bounds.",
+          "Create a safe preview of this DXF and explain missing geometry.",
+          "Diagnose why this drawing imports at the wrong scale."
+        ],
+        "brandColor": "#297A88",
+        "composerIcon": "./assets/icon.svg",
+        "logo": "./assets/icon.svg"
+      },
+      "onboardingSkill": "./skills/cad-rescue/SKILL.md"
+    }
+  }
+}

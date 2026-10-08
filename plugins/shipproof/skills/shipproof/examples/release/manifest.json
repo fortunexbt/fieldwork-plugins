@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "resources": [
+    {
+      "name": "synthetic web app bundle",
+      "url": "https://cdn.example.test/assets/app.js",
+      "asset": "assets/app.js",
+      "sha256": "5ad6575805ac19ec3bcae650431631fe0844ed8c02e71d0b2ee5c1a4de1339a5",
+      "markers": ["demo-release-2026-09"],
+      "headers": {"content-type": "application/javascript"}
+    }
+  ]
+}

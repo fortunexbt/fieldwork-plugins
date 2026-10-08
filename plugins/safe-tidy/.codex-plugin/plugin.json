@@ -1,0 +1,43 @@
+{
+  "name": "safe-tidy",
+  "version": "0.1.0",
+  "description": "Inspect a chosen directory, find byte-identical files, and preview a file organization plan. Apply reviewed moves with a receipt and undo unchanged moves later. Never deletes files or overwrites conflicts. Skips repositories, symlinks and unsupported cloud placeholders rather than treating them as clutter.",
+  "author": {
+    "name": "Fortune",
+    "url": "https://github.com/fortunexbt/fieldwork-plugins"
+  },
+  "homepage": "https://fortunexbt.github.io/fieldwork-plugins/#safe-tidy",
+  "repository": "https://github.com/fortunexbt/fieldwork-plugins",
+  "license": "MIT",
+  "keywords": [
+    "files",
+    "organization",
+    "duplicates",
+    "undo"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Safe Tidy",
+    "shortDescription": "Organize with a way back",
+    "longDescription": "Inspect a chosen directory, find byte-identical files, and preview a file organization plan. Apply reviewed moves with a receipt and undo unchanged moves later. Never deletes files or overwrites conflicts. Skips repositories, symlinks and unsupported cloud placeholders rather than treating them as clutter.",
+    "developerName": "Fortune",
+    "category": "Productivity",
+    "capabilities": [
+      "Inspect a selected folder",
+      "Preview file moves",
+      "Undo verified moves"
+    ],
+    "websiteURL": "https://fortunexbt.github.io/fieldwork-plugins/#safe-tidy",
+    "supportURL": "https://fortunexbt.github.io/fieldwork-plugins/support.html",
+    "privacyPolicyURL": "https://fortunexbt.github.io/fieldwork-plugins/privacy.html",
+    "termsOfServiceURL": "https://fortunexbt.github.io/fieldwork-plugins/terms.html",
+    "defaultPrompt": [
+      "Preview how to organize this folder; keep all the original files.",
+      "Find byte-identical files in this directory without deleting anything.",
+      "Undo the unchanged moves in this Safe Tidy receipt."
+    ],
+    "brandColor": "#9C711F",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg"
+  }
+}

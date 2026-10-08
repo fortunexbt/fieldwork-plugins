@@ -1,0 +1,43 @@
+{
+  "name": "frame-lab",
+  "version": "0.1.0",
+  "description": "Compare Minecraft frame captures, catch invalid measurements, and inspect a supported local benchmark setup. See frame-time tails and true 1% lows alongside the settings that produced them. Live capture requires a supported macOS Minecraft installation; saved evidence can be analyzed in an execution-capable environment.",
+  "author": {
+    "name": "Fortune",
+    "url": "https://github.com/fortunexbt/fieldwork-plugins"
+  },
+  "homepage": "https://fortunexbt.github.io/fieldwork-plugins/#frame-lab",
+  "repository": "https://github.com/fortunexbt/fieldwork-plugins",
+  "license": "MIT",
+  "keywords": [
+    "minecraft",
+    "shaders",
+    "fps",
+    "benchmark"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Minecraft Performance Lab",
+    "shortDescription": "Find your smoother setup",
+    "longDescription": "Compare Minecraft frame captures, catch invalid measurements, and inspect a supported local benchmark setup. See frame-time tails and true 1% lows alongside the settings that produced them. Live capture requires a supported macOS Minecraft installation; saved evidence can be analyzed in an execution-capable environment.",
+    "developerName": "Fortune",
+    "category": "Gaming",
+    "capabilities": [
+      "Analyze frame captures",
+      "Compare measured runs",
+      "Diagnose local setup"
+    ],
+    "websiteURL": "https://fortunexbt.github.io/fieldwork-plugins/#frame-lab",
+    "supportURL": "https://fortunexbt.github.io/fieldwork-plugins/support.html",
+    "privacyPolicyURL": "https://fortunexbt.github.io/fieldwork-plugins/privacy.html",
+    "termsOfServiceURL": "https://fortunexbt.github.io/fieldwork-plugins/terms.html",
+    "defaultPrompt": [
+      "Compare these Minecraft captures and show which run is smoother.",
+      "Check whether my Minecraft benchmark results are a fair comparison.",
+      "Help me prepare a supported local Minecraft benchmark."
+    ],
+    "brandColor": "#28624B",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg"
+  }
+}

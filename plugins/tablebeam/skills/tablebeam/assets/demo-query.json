@@ -1,0 +1,7 @@
+{
+  "where": [
+    {"column": "region", "op": "eq", "value": "North"}
+  ],
+  "group_by": ["owner"],
+  "aggregate": {"op": "sum", "column": "revenue"}
+}
