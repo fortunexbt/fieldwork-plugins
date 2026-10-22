@@ -206,6 +206,22 @@ h1 { font-size: clamp(34px, 6.4vw, 62px); line-height: 1.02; letter-spacing: -0.
   flex-wrap: wrap;
 }
 .runner-headline { font-size: clamp(16px, 2vw, 19px); font-weight: 500; letter-spacing: -0.01em; max-width: 42ch; }
+.input-credit {
+  margin-top: 12px;
+  max-width: 76ch;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--panel-quiet);
+}
+.input-credit span {
+  margin-right: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent-lit);
+}
+.input-credit a { color: var(--accent-lit); }
 .primary-button {
   border: 0;
   border-radius: 100px;

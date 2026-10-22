@@ -58,11 +58,9 @@ async function execute(id, plugin, demo) {
   runtime.FS.mkdirTree(directory);
   runtime.FS.chdir(directory);
   const writeBytes = runtime.globals.get('write_bytes');
-  const writeText = runtime.globals.get('write_text');
   for (const input of demo.inputs || []) {
     writeBytes(input.path, await bytesOf(new URL(`samples/${plugin}/${input.path}`, BASE)));
   }
-  for (const created of demo.creates || []) writeText(created.path, created.text);
 
   let recordings = '{}';
   if (demo.recorded_binaries) {
@@ -74,8 +72,7 @@ async function execute(id, plugin, demo) {
   post(id, 'progress', { stage: 'running', detail: 'Running the tool' });
   let index = 0;
   for (const step of demo.steps) {
-    const argv = step.argv.map((value) => value.replace('{{site}}', BASE.href));
-    const outcome = JSON.parse(runtime.globals.get('run')(plugin, JSON.stringify(argv)));
+    const outcome = JSON.parse(runtime.globals.get('run')(plugin, JSON.stringify(step.argv)));
     let payload = null;
     try { payload = JSON.parse(outcome.stdout); } catch { payload = null; }
     const files = {};
@@ -86,7 +83,7 @@ async function execute(id, plugin, demo) {
         files[item.path] = null;
       }
     }
-    post(id, 'step', { index, argv, outcome, payload, files });
+    post(id, 'step', { index, argv: step.argv, outcome, payload, files });
     index += 1;
   }
   post(id, 'done', {});

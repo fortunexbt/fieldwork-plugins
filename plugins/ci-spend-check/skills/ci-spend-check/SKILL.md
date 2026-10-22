@@ -34,12 +34,6 @@ Do not disable workflows, cancel runs, edit permissions or change billing as par
 of this inspection. If the user separately requests a specific change, follow the
 host's existing authorization workflow and verify the resulting state.
 
-Try the included synthetic sample:
-
-```sh
-python3 scripts/ci_spend_check.py analyze assets/sample-runs.json
-```
-
 Useful result: a ranked workflow table, failure counts, separate elapsed/job
 duration totals, links, and explicit missing evidence. Use `--output` to give the
 user a reusable JSON report. Existing output files are never overwritten.

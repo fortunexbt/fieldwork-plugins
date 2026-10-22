@@ -7,16 +7,11 @@ description: Profile a user-selected CSV and answer exact filter, aggregate, or 
 
 Use Tablebeam when the user asks what a CSV contains or asks a question that can be answered with a literal filter, count, sum, average, minimum, maximum, or grouped aggregate. It reads the named file locally with Python's standard library; it sends no data to a service.
 
-Run commands from the installed `skills/tablebeam` directory that contains this `SKILL.md`; `scripts/` and `assets/` paths below are relative to that directory. The included synthetic example needs no setup or manually created files:
+Run commands from the installed `skills/tablebeam` directory that contains this `SKILL.md`; `scripts/` paths below are relative to that directory. Start by profiling the CSV the user named:
 
 ```bash
-python3 scripts/tablebeam.py profile assets/demo-sales.csv
-python3 scripts/tablebeam.py query assets/demo-sales.csv \
-  --spec assets/demo-query.json \
-  --export ./north-by-owner.csv --export-format csv --preview
+python3 scripts/tablebeam.py profile ./sales.csv
 ```
-
-The demo profiles six synthetic sales rows, then previews grouped revenue for North. Review the exact results and export SHA-256, then repeat the query without `--preview` to write the CSV. Set `--export` to a writable path in the user's workspace if the installed skill directory is read-only. For a user's own data, profile their explicit CSV path in place of `assets/demo-sales.csv`.
 
 The profile reports the detected delimiter, chosen encoding, row and column counts, missing cells, sample values, and whether numeric-looking columns could be identifiers. It shows up to five sample values of 200 characters each and the first 100 columns by default; truncation is marked in the profile, and `--all-columns` returns every column. The default encoding is strict `utf-8-sig`. Pass `--encoding latin-1` or another Python-supported encoding when the file uses a different encoding. Pass `--delimiter ';'` or `--delimiter TAB` if delimiter detection is uncertain. CSV quoting follows the standard double-quote rules.
 

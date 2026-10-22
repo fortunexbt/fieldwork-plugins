@@ -32,60 +32,78 @@
       "runtime": "Python 3.11+. Live capture: supported macOS Minecraft, Java and Minescript.",
       "entrypoint": "frame_lab.py",
       "demo": {
-        "headline": "Compare two frame captures and name the smoother one",
+        "headline": "Check whether a real Minecraft frame capture can be ranked, and measure it anyway",
         "sandbox": "browser",
+        "sandbox_note": "This harness records its route as route.csv and route.txt. Frame Lab ranks a capture only when it has the route.json sidecar from the Frame Bench harness, so it rejects this one and still reports every measurement.",
+        "input": {
+          "about": "Capture mmc-r12-112954-0 from the peak-v2 control set: Minecraft 26.3, a 21-second scripted flight, recorded on 2026-10-06.",
+          "credit": "From the author's minecraft-apple-silicon-framework, MIT.",
+          "url": "https://github.com/fortunexbt/minecraft-apple-silicon-framework"
+        },
+        "inputs": [
+          {
+            "path": "bench-output/mmc-r12-112954-0-done.txt",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-done.txt"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-0-frames.csv",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-frames.csv"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-0-route.csv",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-route.csv"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-0-route.txt",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-route.txt"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-0-start.txt",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-start.txt"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-0-warmup.csv",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-warmup.csv"
+          }
+        ],
         "steps": [
           {
-            "title": "Analyze the built-in synthetic captures",
+            "title": "Validate the capture and measure its frame intervals",
             "argv": [
-              "demo"
+              "inspect",
+              "--evidence-dir",
+              "bench-output",
+              "--run",
+              "mmc-r12-112954-0"
             ],
             "stats": [
               {
-                "label": "Preferred run",
-                "path": "data.comparison.preferred_run"
+                "label": "Accepted for ranking",
+                "path": "data.valid"
               },
               {
-                "label": "Fair comparison",
-                "path": "data.comparison.comparable"
+                "label": "Reason",
+                "path": "data.invalid_reasons[0]"
               },
               {
-                "label": "Frame intervals each",
-                "path": "data.comparison.runs[0].frame_intervals"
+                "label": "Frame intervals",
+                "path": "data.frame_intervals"
+              },
+              {
+                "label": "Average FPS",
+                "path": "data.average_fps"
+              },
+              {
+                "label": "p99 frame time",
+                "path": "data.p99_ms",
+                "suffix": " ms"
+              },
+              {
+                "label": "1% low",
+                "path": "data.one_percent_low_fps",
+                "suffix": " fps"
               }
-            ],
-            "table": {
-              "path": "data.comparison.runs",
-              "columns": [
-                {
-                  "label": "Capture",
-                  "path": "run"
-                },
-                {
-                  "label": "Average FPS",
-                  "path": "average_fps"
-                },
-                {
-                  "label": "p95",
-                  "path": "p95_ms",
-                  "suffix": " ms"
-                },
-                {
-                  "label": "p99",
-                  "path": "p99_ms",
-                  "suffix": " ms"
-                },
-                {
-                  "label": "1% low",
-                  "path": "one_percent_low_fps",
-                  "suffix": " fps"
-                },
-                {
-                  "label": "Valid",
-                  "path": "valid"
-                }
-              ]
-            }
+            ]
           }
         ]
       }
@@ -116,9 +134,14 @@
       "runtime": "Python 3.11+, FFmpeg and FFprobe, with access to the selected files.",
       "entrypoint": "fit_to_upload.py",
       "demo": {
-        "headline": "Budget a 390 KB clip down to a 120 KB upload limit",
+        "headline": "Plan how to fit a 562 kB film clip under a 250 kB upload limit",
         "sandbox": "replayed",
-        "sandbox_note": "A browser cannot host FFmpeg. The probe step replays recorded output from real ffprobe and ffmpeg on this exact clip; the byte budget below is calculated live.",
+        "sandbox_note": "A browser cannot host FFmpeg. The probe step replays what real ffprobe and ffmpeg printed for this exact clip, recorded by scripts/make_samples.py. The byte budget is calculated live from that metadata and the clip's size.",
+        "input": {
+          "about": "Five seconds of Big Buck Bunny (2:00 to 2:05), cut from the 320x180 release with stream copy, so every frame is the original encode.",
+          "credit": "© Blender Foundation, CC BY 3.0.",
+          "url": "https://peach.blender.org/"
+        },
         "inputs": [
           {
             "path": "clip.mp4",
@@ -136,7 +159,7 @@
               "--output",
               "upload.mp4",
               "--max-bytes",
-              "120000"
+              "250000"
             ],
             "stats": [
               {
@@ -185,7 +208,7 @@
             "downloads": [
               {
                 "path": "clip.mp4",
-                "label": "The sample clip",
+                "label": "The clip",
                 "type": "video/mp4"
               }
             ]
@@ -219,26 +242,32 @@
       "runtime": "Python 3.11+ in a file execution environment.",
       "entrypoint": "tablebeam.py",
       "demo": {
-        "headline": "Group a CSV with exact decimal arithmetic",
+        "headline": "Average penguin body mass by species, with exact decimal arithmetic",
         "sandbox": "browser",
+        "sandbox_note": "Two penguins have NA for body mass. Tablebeam reads NA as text, not as a missing value, so the query drops those rows by name instead of guessing.",
+        "input": {
+          "about": "Palmer Penguins: 344 penguins measured at Palmer Station, Antarctica, 2007 to 2009.",
+          "credit": "Horst, Hill and Gorman; data collected by Gorman, Williams and Fraser. CC0.",
+          "url": "https://github.com/allisonhorst/palmerpenguins"
+        },
         "inputs": [
           {
-            "path": "demo-sales.csv",
-            "source": "plugins/tablebeam/skills/tablebeam/assets/demo-sales.csv"
+            "path": "penguins.csv",
+            "source": "samples/tablebeam/penguins.csv"
           },
           {
-            "path": "demo-query.json",
-            "source": "plugins/tablebeam/skills/tablebeam/assets/demo-query.json"
+            "path": "penguins-query.json",
+            "source": "samples/tablebeam/penguins-query.json"
           }
         ],
         "steps": [
           {
-            "title": "Sum revenue per owner for the North region",
+            "title": "Skip the rows with no body mass and average body_mass_g per species",
             "argv": [
               "query",
-              "demo-sales.csv",
+              "penguins.csv",
               "--spec",
-              "demo-query.json"
+              "penguins-query.json"
             ],
             "stats": [
               {
@@ -259,12 +288,17 @@
               "path": "data.result_rows",
               "columns": [
                 {
-                  "label": "Owner",
-                  "path": "group.owner"
+                  "label": "Species",
+                  "path": "group.species"
                 },
                 {
-                  "label": "Revenue sum",
-                  "path": "value"
+                  "label": "Mean body mass (g)",
+                  "path": "value.decimal",
+                  "truncate": 14
+                },
+                {
+                  "label": "Exact",
+                  "path": "value.exact"
                 },
                 {
                   "label": "Rows",
@@ -302,26 +336,33 @@
       "runtime": "Python 3.11+, network access for URL checks, Git for repository handoffs.",
       "entrypoint": "shipproof.py",
       "demo": {
-        "headline": "Check that a deployed file matches the committed copy",
+        "headline": "Check that jsDelivr serves the exact Pyodide file published on npm",
         "sandbox": "network",
-        "sandbox_note": "This downloads a real file from this site over HTTP and hashes it against the copy committed in the repository. Python has no sockets in a browser, so the request goes through XMLHttpRequest; the comparison is the tool's own.",
+        "sandbox_note": "This page runs on that Pyodide release. Python has no sockets in a browser, so the request to jsDelivr goes through XMLHttpRequest; the hashing and the comparison are the tool's own.",
+        "input": {
+          "about": "The expected file is pyodide.mjs from the npm package pyodide@314.0.7.",
+          "credit": "Pyodide contributors, MPL 2.0.",
+          "url": "https://www.npmjs.com/package/pyodide/v/314.0.7"
+        },
         "inputs": [
           {
-            "path": "app.js",
-            "source": "plugins/shipproof/skills/shipproof/examples/release/assets/app.js"
+            "path": "pyodide.mjs",
+            "source": "samples/shipproof/pyodide.mjs"
           }
         ],
         "steps": [
           {
-            "title": "Fetch the served asset and compare it with the expected bytes",
+            "title": "Fetch the served file and compare it with the npm copy",
             "argv": [
               "verify",
               "--url",
-              "{{site}}samples/shipproof/app.js",
+              "https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.mjs",
               "--asset",
-              "app.js",
+              "pyodide.mjs",
               "--marker",
-              "demo-release-2026-09"
+              "314.0.7",
+              "--header",
+              "Content-Type:text/javascript; charset=utf-8"
             ],
             "stats": [
               {
@@ -391,25 +432,62 @@
       "runtime": "Python 3.11+ with access to the chosen local directory.",
       "entrypoint": "safe_tidy.py",
       "demo": {
-        "headline": "Find duplicate files and write a reviewable move plan",
+        "headline": "Find the duplicates in a real benchmark output folder and plan a tidy-up",
         "sandbox": "browser",
         "sandbox_note": "Applying a plan needs hard links, which the browser's in-memory filesystem does not have, so this demo stops at the plan. Installed locally, apply writes an undo receipt before it moves anything.",
-        "creates": [
+        "input": {
+          "about": "The 12 files one capture session wrote, copied unchanged: two repeats of the same Minecraft route, which wrote identical start files.",
+          "credit": "From the author's minecraft-apple-silicon-framework, MIT.",
+          "url": "https://github.com/fortunexbt/minecraft-apple-silicon-framework"
+        },
+        "inputs": [
           {
-            "path": "inbox/notes.txt",
-            "text": "a synthetic note\n"
+            "path": "bench-output/mmc-r12-112954-0-done.txt",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-done.txt"
           },
           {
-            "path": "inbox/notes-copy.txt",
-            "text": "a synthetic note\n"
+            "path": "bench-output/mmc-r12-112954-0-frames.csv",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-frames.csv"
           },
           {
-            "path": "inbox/totals.csv",
-            "text": "item,total\nexample,12\n"
+            "path": "bench-output/mmc-r12-112954-0-route.csv",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-route.csv"
           },
           {
-            "path": "inbox/read-me.md",
-            "text": "# Sample inbox\n\nThree files, one exact duplicate.\n"
+            "path": "bench-output/mmc-r12-112954-0-route.txt",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-route.txt"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-0-start.txt",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-start.txt"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-0-warmup.csv",
+            "source": "samples/minecraft-capture/mmc-r12-112954-0-warmup.csv"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-1-done.txt",
+            "source": "samples/minecraft-capture/mmc-r12-112954-1-done.txt"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-1-frames.csv",
+            "source": "samples/minecraft-capture/mmc-r12-112954-1-frames.csv"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-1-route.csv",
+            "source": "samples/minecraft-capture/mmc-r12-112954-1-route.csv"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-1-route.txt",
+            "source": "samples/minecraft-capture/mmc-r12-112954-1-route.txt"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-1-start.txt",
+            "source": "samples/minecraft-capture/mmc-r12-112954-1-start.txt"
+          },
+          {
+            "path": "bench-output/mmc-r12-112954-1-warmup.csv",
+            "source": "samples/minecraft-capture/mmc-r12-112954-1-warmup.csv"
           }
         ],
         "steps": [
@@ -418,7 +496,7 @@
             "argv": [
               "inventory",
               "--root",
-              "inbox"
+              "bench-output"
             ],
             "stats": [
               {
@@ -460,7 +538,7 @@
             "argv": [
               "plan",
               "--root",
-              "inbox",
+              "bench-output",
               "--output",
               "plan.json"
             ],
@@ -536,16 +614,21 @@
       "entrypoint": "cad_rescue.py",
       "license": "GPL-3.0-only",
       "demo": {
-        "headline": "Open a DXF floor plan and draw a preview from its geometry",
+        "headline": "Open a real DXF and draw a preview from its geometry",
         "sandbox": "browser",
         "sandbox_note": "DXF parsing needs ezdxf, so the first run downloads that package into the browser. It takes a few seconds once.",
         "requires": [
           "ezdxf==1.4.5"
         ],
+        "input": {
+          "about": "usa.dxf from the ezdxf examples: US borders drawn as 59 polylines.",
+          "credit": "Manfred Moitzi and the ezdxf contributors, MIT.",
+          "url": "https://github.com/mozman/ezdxf/blob/master/examples/addons/drawing/data/usa.dxf"
+        },
         "inputs": [
           {
-            "path": "demo-plan.dxf",
-            "source": "plugins/cad-rescue/skills/cad-rescue/assets/demo-plan.dxf"
+            "path": "usa.dxf",
+            "source": "samples/cad-rescue/usa.dxf"
           }
         ],
         "steps": [
@@ -554,7 +637,7 @@
             "argv": [
               "inspect",
               "--input",
-              "demo-plan.dxf"
+              "usa.dxf"
             ],
             "stats": [
               {
@@ -595,9 +678,9 @@
             "argv": [
               "preview",
               "--input",
-              "demo-plan.dxf",
+              "usa.dxf",
               "--output",
-              "plan.svg"
+              "usa.svg"
             ],
             "stats": [
               {
@@ -616,17 +699,17 @@
               }
             ],
             "image": {
-              "path": "plan.svg",
+              "path": "usa.svg",
               "caption": "Drawn from the DXF entities, in your browser"
             },
             "downloads": [
               {
-                "path": "plan.svg",
+                "path": "usa.svg",
                 "label": "The generated SVG",
                 "type": "image/svg+xml"
               },
               {
-                "path": "demo-plan.dxf",
+                "path": "usa.dxf",
                 "label": "The source DXF",
                 "type": "image/vnd.dxf"
               }
@@ -661,20 +744,25 @@
       "runtime": "Python 3.11+. Live GitHub reads use an already authenticated GitHub CLI.",
       "entrypoint": "ci_spend_check.py",
       "demo": {
-        "headline": "Read exported GitHub Actions runs and find the repeated failures",
+        "headline": "Find the repeated failures in a real GitHub Actions history",
         "sandbox": "browser",
+        "input": {
+          "about": "Every Actions run of the public repo fortunexbt/barter, saved on 2026-10-23 by ci_spend_check.py fetch fortunexbt/barter --limit 100 --jobs.",
+          "credit": "Public GitHub API data from the author's MIT-licensed repo.",
+          "url": "https://github.com/fortunexbt/barter/actions"
+        },
         "inputs": [
           {
-            "path": "sample-runs.json",
-            "source": "plugins/ci-spend-check/skills/ci-spend-check/assets/sample-runs.json"
+            "path": "barter-runs.json",
+            "source": "samples/ci-spend-check/barter-runs.json"
           }
         ],
         "steps": [
           {
-            "title": "Analyze the exported run history",
+            "title": "Analyze the saved run history",
             "argv": [
               "analyze",
-              "sample-runs.json"
+              "barter-runs.json"
             ],
             "stats": [
               {
@@ -749,12 +837,25 @@
       "runtime": "Python 3.11+ with access to the selected glTF/GLB and its local resources.",
       "entrypoint": "asset_check.py",
       "demo": {
-        "headline": "Measure a glTF export against explicit budgets",
+        "headline": "Check the Khronos Fox model against a 1,000-triangle, 150 kB budget",
         "sandbox": "browser",
+        "input": {
+          "about": "Fox from the Khronos glTF Sample Assets, as a .gltf with its .bin buffer and PNG texture.",
+          "credit": "Model by PixelMannen (CC0), rigging and animation by tomkranis (CC BY 4.0), glTF conversion by AsoboStudio and scurest (CC BY 4.0).",
+          "url": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/Fox"
+        },
         "inputs": [
           {
-            "path": "tiny-scene.gltf",
-            "source": "plugins/asset-check/skills/asset-check/assets/tiny-scene.gltf"
+            "path": "Fox.gltf",
+            "source": "samples/asset-check/Fox.gltf"
+          },
+          {
+            "path": "Fox.bin",
+            "source": "samples/asset-check/Fox.bin"
+          },
+          {
+            "path": "Texture.png",
+            "source": "samples/asset-check/Texture.png"
           }
         ],
         "steps": [
@@ -763,11 +864,11 @@
             "argv": [
               "inspect",
               "--input",
-              "tiny-scene.gltf",
+              "Fox.gltf",
               "--max-triangles",
-              "1",
+              "1000",
               "--max-bytes",
-              "4096",
+              "150000",
               "--report",
               "asset-report.html"
             ],

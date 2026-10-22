@@ -24,21 +24,7 @@ No packages are installed automatically by CAD Rescue.
 
 ## Inspect and preview
 
-Run the examples from the installed `skills/cad-rescue` directory. Start with the
-included synthetic floor plan:
-
-```bash
-python3 scripts/cad_rescue.py inspect --input assets/demo-plan.dxf
-
-PREVIEW_DIR="$(mktemp -d)"
-python3 scripts/cad_rescue.py preview \
-  --input assets/demo-plan.dxf \
-  --output "$PREVIEW_DIR/demo-plan-preview.svg"
-```
-
-The sample reports 8 model-space entities across `Walls`, `Doors`, and `Furniture`,
-with declared meter units. `mktemp` gives the preview a fresh destination; open the
-reported SVG path to see the result.
+Run the examples from the installed `skills/cad-rescue` directory.
 
 Inspect one selected DXF:
 

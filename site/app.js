@@ -238,10 +238,6 @@ function paintRun(plugin, state) {
 
 /* ---------- rendering one plugin ---------- */
 
-function downloadUrl(item) {
-  return `${catalog.repository}/releases/download/v${catalog.version}/${item.id}-${catalog.version}.zip`;
-}
-
 function commandBlock(command) {
   const block = element('div', 'command');
   block.append(element('code', null, command));
@@ -280,6 +276,7 @@ function selectTool(id) {
         <p class="runner-headline">${escapeHtml(item.demo.headline)}</p>
         <button class="primary-button" id="run-button">Run it</button>
       </div>
+      <p class="input-credit"><span>Input</span>${escapeHtml(item.demo.input.about)} ${escapeHtml(item.demo.input.credit)} <a href="${escapeHtml(item.demo.input.url)}">Source&nbsp;↗</a></p>
       <p class="run-status" id="run-status" role="status">Ready when you are.</p>
       <div id="console"></div>
       ${item.demo.sandbox_note ? `<p class="sandbox-note">${escapeHtml(item.demo.sandbox_note)}</p>` : ''}
@@ -289,7 +286,6 @@ function selectTool(id) {
       <div id="install-commands"></div>
       <p class="install-note">Start a new chat after installing. In the desktop app the collection appears under Plugins. Runtime: ${escapeHtml(item.runtime)}</p>
       <div class="file-row">
-        <a class="file-link" href="${escapeHtml(downloadUrl(item))}">Download the ZIP ↓</a>
         <a class="file-link" href="${escapeHtml(catalog.repository)}/blob/main/plugins/${escapeHtml(item.id)}/skills/${escapeHtml(item.id)}/SKILL.md">Read the skill ↗</a>
       </div>
     </div>

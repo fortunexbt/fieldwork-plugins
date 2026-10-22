@@ -25,12 +25,6 @@ def install(name, source):
     PROGRAM[name] = compile(source, name + ".py", "exec")
 
 
-def write_text(path, text):
-    target = Path(path)
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(text, encoding="utf-8")
-
-
 def write_bytes(path, data):
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)

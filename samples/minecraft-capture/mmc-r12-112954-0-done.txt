@@ -1,0 +1,5 @@
+frames=10570
+unfocused_frames=0
+frame_sink_error=
+buffer_full=false
+hook=Minecraft.renderFrame(boolean) return; CPU frame-production interval, including limiter

@@ -324,20 +324,6 @@ class FrameLabTests(unittest.TestCase):
             self.assertTrue(result["instance"]["minescript_5_detected"])
             self.assertFalse(result["active_client_touched"])
 
-    def test_demo_cli_compares_valid_synthetic_runs(self):
-        output = io.StringIO()
-        with redirect_stdout(output):
-            code = frame_lab.main(["demo"])
-        result = json.loads(output.getvalue())
-        comparison = result["data"]["comparison"]
-        self.assertEqual(code, 0)
-        self.assertEqual(result["data"]["dataset_kind"], "synthetic")
-        self.assertTrue(comparison["comparable"])
-        self.assertTrue(all(run["valid"] for run in comparison["runs"]))
-        self.assertTrue(all(run["dataset_kind"] == "synthetic" for run in comparison["runs"]))
-        self.assertIsNotNone(comparison["preferred_run"])
-        self.assertTrue(any("synthetic" in item.lower() for item in comparison["warnings"]))
-
     def test_cli_inspection_uses_the_documented_json_envelope(self):
         with tempfile.TemporaryDirectory() as tmp:
             evidence = Path(tmp) / "evidence"

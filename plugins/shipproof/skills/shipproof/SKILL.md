@@ -29,12 +29,12 @@ Use a manifest for multiple independently mapped resources. Asset paths are rela
   "schema_version": 1,
   "resources": [
     {
-      "name": "web app bundle",
-      "url": "https://cdn.example.test/assets/app.js",
-      "asset": "dist/assets/app.js",
-      "sha256": "5ad6575805ac19ec3bcae650431631fe0844ed8c02e71d0b2ee5c1a4de1339a5",
-      "markers": ["release-2026-09"],
-      "headers": {"content-type": "application/javascript"}
+      "name": "Pyodide loader",
+      "url": "https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.mjs",
+      "asset": "pyodide/pyodide.mjs",
+      "sha256": "6f1d60f7bf529beb300f0f47983c921d3982363640ba20af0e38efdddbc66109",
+      "markers": ["314.0.7"],
+      "headers": {"content-type": "text/javascript; charset=utf-8"}
     }
   ]
 }
@@ -46,7 +46,7 @@ Run it with:
 python3 scripts/shipproof.py verify --manifest ./shipproof-manifest.json
 ```
 
-The manifest field is the SHA-256 of the checked-in synthetic asset shown below. For your own release, replace it with the hash of the selected file or omit the field. A route returning HTTP 200 can still mismatch because it returned an HTML fallback, stale bytes, or the wrong headers. A missing or inaccessible response is reported as mismatch or unverifiable according to the evidence available. This deterministic check does not run a browser or establish that a visual scenario, client-side interaction, or authenticated user flow works. Record a separate browser receipt when those claims matter.
+Here `asset` is `pyodide.mjs` from the npm tarball of `pyodide@314.0.7` and `sha256` is its hash. For your own release, replace it with the hash of the selected file or omit the field. A route returning HTTP 200 can still mismatch because it returned an HTML fallback, stale bytes, or the wrong headers. A missing or inaccessible response is reported as mismatch or unverifiable according to the evidence available. This deterministic check does not run a browser or establish that a visual scenario, client-side interaction, or authenticated user flow works. Record a separate browser receipt when those claims matter.
 
 ## Create a repository handoff
 
@@ -62,17 +62,13 @@ python3 scripts/shipproof.py handoff \
 
 If the preview is right, run the same command without `--preview`. It refuses to overwrite existing `handoff.md` or `manifest.json`. The Markdown report and JSON manifest contain the revision, branch, dirty path status, recognized build/test command names, and selected tracked source-file sizes and SHA-256 hashes. They contain no source contents. Untracked files are listed only as dirty paths and are not hashed or copied. Modified tracked files are hashed from the working tree, but the handoff does not back up their contents. Sensitive filenames, generated folders, symlinks, and files past the size limits are excluded. No project build or test command is executed.
 
-## Synthetic example
-
-`examples/release/manifest.json` and `examples/release/assets/app.js` contain a small synthetic release fixture. To make a runnable local HTTP fixture, serve the `examples/release` directory on a local development server, then pass its asset URL and the checked-in local asset path to `verify`. The sample URL in the manifest uses the reserved `example.test` domain and is not contacted by the fixture.
-
-Example natural-language requests:
+## Example requests
 
 - “Does this CDN URL serve the exact `dist/app.js` from my build?” → use `verify --url URL --asset FILE`.
 - “Compare these three production asset routes with the release manifest.” → use `verify --manifest FILE`.
 - “Prepare a handoff for this checkout, with hashes for `src/` only.” → preview, then run `handoff --repo DIR --out-dir DIR --include 'src/**'`.
 
-Example result shape for the synthetic fixture (illustrative URL; it is not a live verification receipt):
+Result of a real run on 2026-10-23, checking that jsDelivr serves the `pyodide.mjs` published in the npm package (`verify --url https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.mjs --asset pyodide.mjs --marker 314.0.7 --header 'Content-Type:text/javascript; charset=utf-8'`), with the response headers omitted:
 
 ```json
 {
@@ -85,13 +81,17 @@ Example result shape for the synthetic fixture (illustrative URL; it is not a li
       {
         "name": "release asset",
         "result": "match",
-        "request_url": "https://cdn.example.test/assets/app.js",
+        "request_url": "https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.mjs",
+        "final_url": "https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.mjs",
         "status_code": 200,
+        "redirects": [],
         "checks": [
           {"check": "http_status", "result": "match", "expected": 200, "actual": 200},
-          {"check": "sha256", "result": "match", "expected": "5ad6575805ac19ec3bcae650431631fe0844ed8c02e71d0b2ee5c1a4de1339a5", "actual": "5ad6575805ac19ec3bcae650431631fe0844ed8c02e71d0b2ee5c1a4de1339a5"},
-          {"check": "marker", "marker": "demo-release-2026-09", "result": "match", "expected_asset": "match", "served_response": "match"}
-        ]
+          {"check": "sha256", "result": "match", "expected": "6f1d60f7bf529beb300f0f47983c921d3982363640ba20af0e38efdddbc66109", "actual": "6f1d60f7bf529beb300f0f47983c921d3982363640ba20af0e38efdddbc66109"},
+          {"check": "marker", "marker": "314.0.7", "result": "match", "expected_asset": "match", "served_response": "match"},
+          {"check": "header", "name": "content-type", "result": "match", "expected": "text/javascript; charset=utf-8", "actual": "text/javascript; charset=utf-8"}
+        ],
+        "reasons": []
       }
     ]
   },

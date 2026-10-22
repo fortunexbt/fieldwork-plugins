@@ -15,7 +15,6 @@ import re
 import shutil
 import statistics
 import subprocess
-import tempfile
 import zipfile
 from pathlib import Path
 from typing import Any
@@ -1135,78 +1134,6 @@ def export_report(
     return {"status": "ok", "plan": plan, "receipt": receipt, "media_type": media_type}
 
 
-def _write_demo_capture(root: Path, run: str, base_ns: int, slow_ns: int) -> None:
-    root.mkdir(parents=True, exist_ok=True)
-    with (root / f"{run}-frames.csv").open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.writer(stream)
-        writer.writerow(("frame", "nanotime", "interval_ns"))
-        now = 1_000_000_000
-        writer.writerow((0, now, 0))
-        slow_count = 200
-        base_count = (120_000_000_000 - slow_count * slow_ns) // base_ns
-        interval_count = base_count + slow_count
-        for index in range(interval_count):
-            interval = base_ns if index < base_count else slow_ns
-            now += interval
-            writer.writerow((index + 1, now, interval))
-    (root / f"{run}-start.txt").write_text(
-        "hook=Minecraft.renderFrame(boolean) return; CPU frame-production interval\n"
-        "seconds=120\nlive_inactivity_policy=MINIMIZED\nlive_throttle_reason=NONE\nlive_frame_limit=120\n",
-        encoding="utf-8",
-    )
-    (root / f"{run}-done.txt").write_text(
-        f"frames={interval_count + 1}\nunfocused_frames=0\nframe_sink_error=\nbuffer_full=false\n"
-        "hook=Minecraft.renderFrame(boolean) return; CPU frame-production interval\n",
-        encoding="utf-8",
-    )
-    (root / f"{run}-route.json").write_text(
-        json.dumps(
-            {
-                "kind": "fixed-position synthetic demo pan",
-                "seconds": 120.0,
-                "positions": [{"position": [0, 64, 0], "tick": 1000}],
-                "world_start": {"dimension": "overworld", "world_label": "synthetic-demo"},
-                "world_end": {"dimension": "overworld", "world_label": "synthetic-demo"},
-                "yaw_start": 0,
-                "pitch": 5,
-                "weather": "clear",
-                "day_start": 6000,
-            }
-        ),
-        encoding="utf-8",
-    )
-    profile = {
-        "schema_version": 1,
-        "host_id": "synthetic-example-host",
-        "minecraft_version": "26.3",
-        "loader": "Fabric example",
-        "java_major": 25,
-        "framebuffer_px": {"width": 1920, "height": 1080},
-        "scene_id": "synthetic-fixed-pan",
-        "settings": {"frame_limit": 120, "render_distance": 16, "shader": "synthetic-example"},
-        "dataset_kind": "synthetic",
-    }
-    (root / f"{run}-profile.json").write_text(json.dumps(profile), encoding="utf-8")
-    (root / f"{run}-context.json").write_text(
-        json.dumps({"environment_gate": {"passed": True}, "dataset_kind": "synthetic"}),
-        encoding="utf-8",
-    )
-
-
-def run_demo() -> dict[str, Any]:
-    """Run the analyzer on clearly labelled synthetic public-format evidence."""
-    with tempfile.TemporaryDirectory(prefix="frame-lab-demo-") as temporary:
-        root = Path(temporary)
-        _write_demo_capture(root, "demo-baseline", 8_000_000, 20_000_000)
-        _write_demo_capture(root, "demo-candidate", 7_500_000, 18_000_000)
-        comparison = compare_captures(root, ["demo-baseline", "demo-candidate"])
-        return {
-            "dataset_kind": "synthetic",
-            "summary": "Synthetic format demonstration only; it contains no Minecraft measurements.",
-            "comparison": comparison,
-        }
-
-
 def _envelope(
     status: str,
     summary: str,
@@ -1251,8 +1178,6 @@ def build_parser() -> argparse.ArgumentParser:
     export.add_argument("--output", type=Path, required=True, help="new report path; existing files are never overwritten")
     export.add_argument("--format", choices=("json", "html"), default="json", help="portable report format")
     export.add_argument("--dry-run", action="store_true", help="show the exact output plan and content hash without writing")
-
-    subparsers.add_parser("demo", help="show the analysis flow on temporary synthetic data")
     return parser
 
 
@@ -1274,16 +1199,13 @@ def main(argv: list[str] | None = None) -> int:
                 parser.error("compare requires at least two --runs values")
             data = compare_captures(args.evidence_dir, args.runs)
             result = _envelope(data["status"], "Capture comparison completed." if data["comparable"] else "Captures cannot be compared fairly with the available evidence.", data, warnings=data["warnings"])
-        elif args.command == "export":
+        else:
             data = export_report(args.evidence_dir, args.runs, args.output, args.format, dry_run=args.dry_run)
             artifacts = []
             if data["receipt"]:
                 artifacts.append({"path": data["receipt"]["path"], "label": "Portable Minecraft frame report", "media_type": data["media_type"]})
             summary = "Report plan previewed; no file was written." if args.dry_run else "Portable report created with an input-preservation receipt."
             result = _envelope("ok", summary, data, artifacts=artifacts)
-        else:
-            data = run_demo()
-            result = _envelope("ok", data["summary"], data, warnings=data["comparison"]["warnings"])
         print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
         return 0
     except LabError as exc:

@@ -4,18 +4,16 @@
 The site drives each plugin from the `demo` block in catalog.json and executes
 the unmodified script in Pyodide. This runs the same steps with the local
 interpreter, so a demo that drifts from its tool fails in CI rather than in a
-browser.
+browser. Every demo must name where its input came from, and every value the
+page shows must be present in the tool's own output.
 """
 import argparse
-import functools
-import http.server
 import json
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
-import threading
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -67,30 +65,25 @@ def check_view(step, payload, failures, label):
                 failures.append(f"{label}: table column {column['path']} is missing from every row")
 
 
-def serve(directory):
-    handler = functools.partial(QuietHandler, directory=str(directory))
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-    thread = threading.Thread(target=server.serve_forever, daemon=True)
-    thread.start()
-    return server, thread
+def check_input(plugin, failures):
+    credit = plugin["demo"].get("input", {})
+    for field in ("about", "credit", "url"):
+        if not str(credit.get(field, "")).strip():
+            failures.append(f"{plugin['id']}: demo input has no {field}")
+    if not str(credit.get("url", "")).startswith("https://"):
+        failures.append(f"{plugin['id']}: demo input url must be an https link to the source")
+    if not plugin["demo"].get("inputs"):
+        failures.append(f"{plugin['id']}: demo has no input files")
 
 
-class QuietHandler(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, *_):
-        pass
-
-
-def run_demo(plugin, work, origin):
+def run_demo(plugin, work):
     demo = plugin["demo"]
     failures = []
+    check_input(plugin, failures)
     for item in demo.get("inputs", []):
         target = work / item["path"]
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / item["source"], target)
-    for item in demo.get("creates", []):
-        target = work / item["path"]
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(item["text"], encoding="utf-8")
 
     recorded = demo.get("recorded_binaries")
     if recorded:
@@ -102,9 +95,8 @@ def run_demo(plugin, work, origin):
             failures.append(f"{plugin['id']}: recorded ffprobe reports {declared} bytes, the clip is {measured}")
 
     for number, step in enumerate(demo["steps"], start=1):
-        argv = [argument.replace("{{site}}", origin) for argument in step["argv"]]
         label = f"{plugin['id']} step {number}"
-        completed = subprocess.run([sys.executable, str(script_for(plugin["id"])), *argv],
+        completed = subprocess.run([sys.executable, str(script_for(plugin["id"])), *step["argv"]],
                                    capture_output=True, text=True, timeout=180, cwd=work, check=False)
         if completed.returncode != 0:
             failures.append(f"{label}: exit {completed.returncode}: {completed.stderr.strip()[-400:] or completed.stdout.strip()[-400:]}")
@@ -139,21 +131,7 @@ def main():
                          ROOT / "plugins" / plugin["id"] / ".codex-plugin" / "plugin.json"):
             json.loads(manifest.read_text())
         with tempfile.TemporaryDirectory(prefix="fieldwork-demo-") as temporary:
-            root = Path(temporary)
-            work, served = root / "work", root / "serve"
-            work.mkdir()
-            for item in plugin["demo"].get("inputs", []):
-                target = served / "samples" / plugin["id"] / item["path"]
-                target.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(ROOT / item["source"], target)
-            served.mkdir(exist_ok=True)
-            server, thread = serve(served)
-            try:
-                found = run_demo(plugin, work, f"http://127.0.0.1:{server.server_port}/")
-            finally:
-                server.shutdown()
-                server.server_close()
-                thread.join()
+            found = run_demo(plugin, Path(temporary))
         print(f"{plugin['id']}: {'ok' if not found else 'FAILED'}")
         failures.extend(found)
 

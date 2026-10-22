@@ -1,0 +1,5 @@
+hook=Minecraft.renderFrame(boolean) return; CPU frame-production interval, including limiter
+seconds=30
+live_inactivity_policy=MINIMIZED
+live_throttle_reason=NONE
+live_frame_limit=260
