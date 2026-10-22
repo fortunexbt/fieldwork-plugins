@@ -261,6 +261,7 @@ function selectTool(id) {
     button.classList.toggle('active', active);
     button.setAttribute('aria-selected', active ? 'true' : 'false');
     button.tabIndex = active ? 0 : -1;
+    if (active) detail.setAttribute('aria-labelledby', button.id);
     if (active && list.scrollWidth > list.clientWidth) {
       list.scrollTo({ left: button.offsetLeft - (list.clientWidth - button.clientWidth) / 2, behavior: 'smooth' });
     }
@@ -320,7 +321,9 @@ document.querySelector('#version').textContent = `${catalog.plugins.length} plug
 for (const item of catalog.plugins) {
   const button = element('button', 'tool-button');
   button.dataset.id = item.id;
+  button.id = `tab-${item.id}`;
   button.setAttribute('role', 'tab');
+  button.setAttribute('aria-controls', 'tool-detail');
   button.innerHTML = `<img src="icons/${escapeHtml(item.id)}.svg" alt="" width="24" height="24"><span>${escapeHtml(item.name)}<small>${escapeHtml(item.short)}</small></span>`;
   button.onclick = () => {
     if (location.hash.slice(1) === item.id) selectTool(item.id);
