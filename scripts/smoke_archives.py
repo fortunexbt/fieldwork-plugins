@@ -27,6 +27,7 @@ else:
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SAMPLES = ROOT / "samples"
 PYTHON = sys.executable
 EXCLUDED_DIRS = {"__pycache__", ".git", ".pytest_cache", ".venv", "node_modules"}
 VALID_CLI_STATUSES = {"ok", "needs_attention"}
@@ -229,11 +230,18 @@ def verify_output_receipt(
 
 def smoke_frame(result: dict[str, Any], skill: Path, scratch: Path, _dependencies: dict[str, Any]) -> None:
     del scratch
-    payload = run_json_cli(result, "synthetic demo", skill, ["scripts/frame_lab.py", "demo"])
-    if payload["data"].get("dataset_kind") != "synthetic":
-        raise SmokeFailure("Frame Lab demo did not identify its data as synthetic")
-    if payload["data"].get("comparison", {}).get("comparable") is not True:
-        raise SmokeFailure("Frame Lab synthetic runs were not comparable")
+    payload = run_json_cli(
+        result,
+        "recorded capture inspection",
+        skill,
+        ["scripts/frame_lab.py", "inspect", "--evidence-dir", str(SAMPLES / "minecraft-capture"), "--run", "mmc-r12-112954-0"],
+        statuses={"needs_attention"},
+    )
+    data = payload["data"]
+    if data.get("frame_intervals") != 10569 or data.get("p99_ms") is None:
+        raise SmokeFailure("Frame Lab did not measure every interval of the recorded capture")
+    if data.get("valid") is not False or "Missing route completion sidecar." not in data.get("invalid_reasons", []):
+        raise SmokeFailure("Frame Lab accepted a capture that has no route.json sidecar")
 
 
 def smoke_fit(result: dict[str, Any], skill: Path, scratch: Path, dependencies: dict[str, Any]) -> None:
@@ -318,20 +326,20 @@ def smoke_fit(result: dict[str, Any], skill: Path, scratch: Path, dependencies: 
 
 
 def smoke_tablebeam(result: dict[str, Any], skill: Path, scratch: Path, _dependencies: dict[str, Any]) -> None:
-    csv_path = skill / "assets" / "demo-sales.csv"
-    spec_path = skill / "assets" / "demo-query.json"
+    csv_path = SAMPLES / "tablebeam" / "penguins.csv"
+    spec_path = SAMPLES / "tablebeam" / "penguins-query.json"
     source_hashes = {path.name: sha256_file(path) for path in (csv_path, spec_path)}
     export = scratch / "tablebeam-demo.csv"
     payload = run_json_cli(
         result,
-        "bundled demo query",
+        "sample penguin query",
         skill,
         [
             "scripts/tablebeam.py",
             "query",
-            "assets/demo-sales.csv",
+            str(csv_path),
             "--spec",
-            "assets/demo-query.json",
+            str(spec_path),
             "--export",
             str(export),
             "--export-format",
@@ -340,7 +348,7 @@ def smoke_tablebeam(result: dict[str, Any], skill: Path, scratch: Path, _depende
     )
     data = payload["data"]
     if data.get("matched_row_count", 0) < 1 or data.get("preview", {}).get("total", 0) < 1:
-        raise SmokeFailure("Tablebeam bundled query returned no matching source rows")
+        raise SmokeFailure("Tablebeam sample query returned no matching source rows")
     receipt = data.get("export_receipt", {})
     exported = output_record("Tablebeam query CSV", export)
     result["outputs"].append(exported)
@@ -351,26 +359,25 @@ def smoke_tablebeam(result: dict[str, Any], skill: Path, scratch: Path, _depende
     if len(rows) < 2 or not rows[0]:
         raise SmokeFailure("Tablebeam export does not contain a header and result row")
     if any(sha256_file(path) != source_hashes[path.name] for path in (csv_path, spec_path)):
-        raise SmokeFailure("Tablebeam changed a bundled demo input")
+        raise SmokeFailure("Tablebeam changed a sample input")
 
 
 def smoke_shipproof(result: dict[str, Any], skill: Path, scratch: Path, _dependencies: dict[str, Any]) -> None:
-    bundled_asset = skill / "examples" / "release" / "assets" / "app.js"
-    original = bundled_asset.read_bytes()
-    asset = scratch / "served-app.js"
+    original = (SAMPLES / "shipproof" / "pyodide.mjs").read_bytes()
+    asset = scratch / "pyodide.mjs"
     asset.write_bytes(original)
     expected_hash = sha256_bytes(original)
-    marker = "demo-release-2026-09"
+    marker = "314.0.7"
     if marker.encode("utf-8") not in original:
-        raise SmokeFailure("bundled ShipProof asset is missing its documented marker")
+        raise SmokeFailure("ShipProof sample asset is missing its release marker")
 
     class Handler(http.server.BaseHTTPRequestHandler):
         def do_GET(self) -> None:
-            if self.path != "/assets/app.js":
+            if self.path != "/pyodide.mjs":
                 self.send_error(404)
                 return
             self.send_response(200)
-            self.send_header("Content-Type", "application/javascript")
+            self.send_header("Content-Type", "text/javascript")
             self.send_header("Content-Length", str(len(original)))
             self.end_headers()
             self.wfile.write(original)
@@ -382,7 +389,7 @@ def smoke_shipproof(result: dict[str, Any], skill: Path, scratch: Path, _depende
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     try:
-        url = f"http://127.0.0.1:{server.server_port}/assets/app.js"
+        url = f"http://127.0.0.1:{server.server_port}/pyodide.mjs"
         payload = run_json_cli(
             result,
             "temporary HTTP asset verification",
@@ -464,25 +471,25 @@ def smoke_cad(result: dict[str, Any], skill: Path, scratch: Path, dependencies: 
     ezdxf = dependencies["ezdxf"]
     if not ezdxf.get("available"):
         raise DependencyUnavailable("ezdxf 1.4.4 or later (before 2.0) is unavailable in the active Python")
-    bundled_source = skill / "assets" / "demo-plan.dxf"
-    bundled_hash = sha256_file(bundled_source)
-    source = scratch / "synthetic-safe-geometry.dxf"
-    preview = scratch / "synthetic-safe-geometry.svg"
-    source.write_bytes(bundled_source.read_bytes())
+    sample = SAMPLES / "cad-rescue" / "usa.dxf"
+    sample_hash = sha256_file(sample)
+    source = scratch / "usa.dxf"
+    preview = scratch / "usa.svg"
+    source.write_bytes(sample.read_bytes())
     source_hash = sha256_file(source)
-    result["outputs"].append(output_record("generated synthetic DXF input", source))
+    result["outputs"].append(output_record("sample DXF input", source))
 
-    inspected = run_json_cli(result, "generated DXF inspect", skill, ["scripts/cad_rescue.py", "inspect", "--input", str(source)])
-    if inspected["data"].get("entity_count", 0) < 2:
-        raise SmokeFailure("CAD Rescue did not inspect the two generated model-space entities")
+    inspected = run_json_cli(result, "sample DXF inspect", skill, ["scripts/cad_rescue.py", "inspect", "--input", str(source)])
+    if inspected["data"].get("entity_count") != 59:
+        raise SmokeFailure("CAD Rescue did not inspect all 59 model-space entities of the sample DXF")
     previewed = run_json_cli(
         result,
-        "generated DXF safe preview",
+        "sample DXF safe preview",
         skill,
         ["scripts/cad_rescue.py", "preview", "--input", str(source), "--output", str(preview)],
     )
     receipt = previewed.get("data", {}).get("receipt", {})
-    svg = output_record("generated CAD SVG preview", preview)
+    svg = output_record("CAD SVG preview", preview)
     result["outputs"].append(svg)
     if receipt.get("size_bytes") != svg["bytes"] or receipt.get("sha256") != svg["sha256"]:
         raise SmokeFailure("CAD Rescue preview receipt does not match the generated SVG")
@@ -496,51 +503,51 @@ def smoke_cad(result: dict[str, Any], skill: Path, scratch: Path, dependencies: 
         raise SmokeFailure("CAD Rescue preview contains unexpected content or omitted safe geometry")
     if previewed.get("data", {}).get("paths_written", 0) < 1:
         raise SmokeFailure("CAD Rescue preview did not render any geometry paths")
-    if sha256_file(source) != source_hash or sha256_file(bundled_source) != bundled_hash:
-        raise SmokeFailure("CAD Rescue changed the generated DXF source")
+    if sha256_file(source) != source_hash or sha256_file(sample) != sample_hash:
+        raise SmokeFailure("CAD Rescue changed the sample DXF source")
 
 
 def smoke_ci(result: dict[str, Any], skill: Path, scratch: Path, _dependencies: dict[str, Any]) -> None:
-    sample = skill / "assets" / "sample-runs.json"
+    sample = SAMPLES / "ci-spend-check" / "barter-runs.json"
     sample_hash = sha256_file(sample)
     report = scratch / "ci-spend-report.json"
     payload = run_json_cli(
         result,
-        "bundled CI evidence analysis",
+        "recorded CI evidence analysis",
         skill,
-        ["scripts/ci_spend_check.py", "analyze", "assets/sample-runs.json", "--output", str(report)],
+        ["scripts/ci_spend_check.py", "analyze", str(sample), "--output", str(report)],
         statuses={"needs_attention"},
     )
     data = payload["data"]
     if data.get("runs_analyzed", 0) < 1 or not data.get("workflows"):
-        raise SmokeFailure("CI Spend Check did not analyze the bundled run evidence")
+        raise SmokeFailure("CI Spend Check did not analyze the recorded run evidence")
     saved = json_file(report, "CI Spend Check report")
     saved_output = output_record("CI Spend Check JSON report", report)
     result["outputs"].append(saved_output)
     if saved.get("status") != payload.get("status") or saved.get("data", {}).get("runs_analyzed") != data.get("runs_analyzed"):
         raise SmokeFailure("CI Spend Check saved report differs from its CLI JSON result")
     if sha256_file(sample) != sample_hash:
-        raise SmokeFailure("CI Spend Check changed its bundled sample input")
+        raise SmokeFailure("CI Spend Check changed its sample input")
 
 
 def smoke_asset(result: dict[str, Any], skill: Path, scratch: Path, _dependencies: dict[str, Any]) -> None:
-    source = skill / "assets" / "tiny-scene.gltf"
+    source = SAMPLES / "asset-check" / "Fox.gltf"
     source_hash = sha256_file(source)
-    report = scratch / "tiny-scene-report.html"
-    receipt_path = scratch / "tiny-scene-receipt.json"
+    report = scratch / "fox-report.html"
+    receipt_path = scratch / "fox-receipt.json"
     payload = run_json_cli(
         result,
-        "bundled glTF inspection",
+        "sample glTF inspection",
         skill,
         [
             "scripts/asset_check.py",
             "inspect",
             "--input",
-            "assets/tiny-scene.gltf",
+            str(source),
             "--max-triangles",
-            "1",
+            "1000",
             "--max-bytes",
-            "4096",
+            "250000",
             "--report",
             str(report),
             "--receipt",
@@ -551,8 +558,8 @@ def smoke_asset(result: dict[str, Any], skill: Path, scratch: Path, _dependencie
     scene = data.get("scene", {})
     active_index = scene.get("active_scene_index")
     scenes = scene.get("scenes", [])
-    if active_index is None or active_index >= len(scenes) or scenes[active_index].get("triangle_candidates") != 1:
-        raise SmokeFailure("Asset Check did not validate the bundled one-triangle scene")
+    if active_index is None or active_index >= len(scenes) or scenes[active_index].get("triangle_candidates") != 576:
+        raise SmokeFailure("Asset Check did not count the 576 triangles of the sample scene")
     if any(data.get("budgets", {}).get(key, {}).get("result") != "within" for key in ("triangles", "bytes")):
         raise SmokeFailure("Asset Check did not verify both supplied budgets")
     report_record = output_record("Asset Check HTML report", report)
@@ -565,7 +572,7 @@ def smoke_asset(result: dict[str, Any], skill: Path, scratch: Path, _dependencie
     if saved.get("status") != payload.get("status") or saved.get("data", {}).get("budgets") != data.get("budgets"):
         raise SmokeFailure("Asset Check JSON receipt differs from the CLI result")
     if sha256_file(source) != source_hash:
-        raise SmokeFailure("Asset Check changed the bundled glTF source")
+        raise SmokeFailure("Asset Check changed the sample glTF source")
 
 
 def probe_dependencies() -> dict[str, Any]:

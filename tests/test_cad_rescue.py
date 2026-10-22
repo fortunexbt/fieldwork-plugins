@@ -18,7 +18,7 @@ import ezdxf
 
 ROOT = Path(__file__).resolve().parents[1]
 CLI = ROOT / "plugins" / "cad-rescue" / "skills" / "cad-rescue" / "scripts" / "cad_rescue.py"
-DEMO_DXF = ROOT / "plugins" / "cad-rescue" / "skills" / "cad-rescue" / "assets" / "demo-plan.dxf"
+SAMPLE_DXF = ROOT / "samples" / "cad-rescue" / "usa.dxf"
 
 
 class CadRescueCliTests(unittest.TestCase):
@@ -92,23 +92,23 @@ class CadRescueCliTests(unittest.TestCase):
         self.assertAlmostEqual(data["extents"]["max_x"], 1_000_000_034.0)
         self.assertAlmostEqual(data["extents"]["max_y"], 2_000_000_014.0)
 
-    def test_packaged_floor_plan_is_a_working_first_run_example(self) -> None:
-        original_hash = hashlib.sha256(DEMO_DXF.read_bytes()).hexdigest()
-        inspected, report = self.run_cli("inspect", "--input", str(DEMO_DXF))
-        output = self.root / "demo-preview.svg"
+    def test_sample_drawing_from_ezdxf_inspects_and_previews(self) -> None:
+        original_hash = hashlib.sha256(SAMPLE_DXF.read_bytes()).hexdigest()
+        inspected, report = self.run_cli("inspect", "--input", str(SAMPLE_DXF))
+        output = self.root / "usa-preview.svg"
         previewed, preview = self.run_cli(
-            "preview", "--input", str(DEMO_DXF), "--output", str(output)
+            "preview", "--input", str(SAMPLE_DXF), "--output", str(output)
         )
 
         self.assertEqual(inspected.returncode, 0, inspected.stderr)
         self.assertEqual(report["status"], "ok")
-        self.assertEqual(report["data"]["entity_count"], 8)
-        self.assertEqual(report["data"]["units"]["name"], "Meters")
-        self.assertEqual(set(report["data"]["layers"]), {"Walls", "Doors", "Furniture"})
+        self.assertEqual(report["data"]["entity_count"], 59)
+        self.assertEqual(report["data"]["units"]["status"], "not_declared")
+        self.assertEqual(set(report["data"]["layers"]), {"BORDERS"})
         self.assertEqual(previewed.returncode, 0, previewed.stderr)
         self.assertEqual(preview["status"], "ok")
         self.assertGreater(preview["data"]["paths_written"], 0)
-        self.assertEqual(hashlib.sha256(DEMO_DXF.read_bytes()).hexdigest(), original_hash)
+        self.assertEqual(hashlib.sha256(SAMPLE_DXF.read_bytes()).hexdigest(), original_hash)
 
     @unittest.skipUnless(shutil.which("rsvg-convert"), "rsvg-convert is required to inspect the rendered preview")
     def test_preview_contains_curves_and_insert_geometry_and_renders_as_svg(self) -> None:

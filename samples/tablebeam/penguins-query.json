@@ -1,0 +1,7 @@
+{
+  "where": [
+    {"column": "body_mass_g", "op": "ne", "value": "NA"}
+  ],
+  "group_by": ["species"],
+  "aggregate": {"op": "avg", "column": "body_mass_g"}
+}

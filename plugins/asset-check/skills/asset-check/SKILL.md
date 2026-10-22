@@ -7,21 +7,6 @@ description: Inspect one glTF or GLB export for accessor-backed geometry, scene 
 
 Run `scripts/asset_check.py` with Python 3.11 or later. It uses only the standard library and reads one explicitly selected `.gltf` or `.glb` file. It does not open a 3D renderer, fetch remote URIs, or search other directories.
 
-## First run
-
-The included synthetic example has one indexed triangle and one embedded texture. From this skill directory, inspect it and save a visual report plus a JSON receipt:
-
-```sh
-python3 scripts/asset_check.py inspect \
-  --input assets/tiny-scene.gltf \
-  --max-triangles 1 \
-  --max-bytes 4096 \
-  --report tiny-scene.asset-check.html \
-  --receipt tiny-scene.asset-check.json
-```
-
-Both output paths must be new files. The original export is left untouched. The command also prints the same JSON receipt to stdout.
-
 ## Inspect an export
 
 ```sh
@@ -32,6 +17,8 @@ python3 scripts/asset_check.py inspect \
   --report "/path/to/review/scene-report.html" \
   --receipt "/path/to/review/scene-receipt.json"
 ```
+
+Both output paths must be new files. The original export is left untouched. The command also prints the same JSON receipt to stdout.
 
 Supply only limits you chose for the destination. The triangle limit compares against the selected default scene after counting reachable mesh nodes and `EXT_mesh_gpu_instancing` multiplicity. The byte limit compares the source file plus each unique local external resource file. Without a limit the result says `not_set`; when a measure cannot be established it says `unknown`. An over-budget inspection completes with `status: needs_attention` and exit code 0. Malformed input or an output error returns an error envelope and exit code 1; invalid command arguments exit 2.
 

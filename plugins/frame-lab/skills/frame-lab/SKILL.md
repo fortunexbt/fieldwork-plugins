@@ -95,7 +95,7 @@ python3 scripts/frame_lab.py export --evidence-dir "/path/to/bench-output" \
   --format html
 ```
 
-The completed command returns a receipt with the report path, byte count, and SHA-256. Reports omit source-directory paths and contain no linked assets. `python3 scripts/frame_lab.py demo` exercises the same parser with temporary synthetic captures; its output is explicitly marked synthetic and never describes a real game run.
+The completed command returns a receipt with the report path, byte count, and SHA-256. Reports omit source-directory paths and contain no linked assets.
 
 ## Teardown
 
