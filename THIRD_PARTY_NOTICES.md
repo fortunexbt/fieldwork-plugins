@@ -20,3 +20,10 @@ under GPL-3.0-only. Read the license in each plugin archive before redistributin
 The remaining plugins use the Python standard library and, for optional live
 repository operations, separately installed Git or GitHub CLI. The catalog icons
 and synthetic fixtures are original unless an adjacent notice says otherwise.
+
+The catalog site bundles two typefaces under the SIL Open Font License 1.1:
+[DM Sans](https://fonts.google.com/specimen/DM+Sans) by Colophon Foundry, Jonny Pinhorn
+and Indian Type Foundry, and [IBM Plex Mono](https://github.com/IBM/plex) by IBM. The
+Latin subsets in `site/fonts/` came from Google Fonts unchanged. To run a tool in the
+page the site loads [Pyodide](https://pyodide.org) (MPL-2.0) from jsDelivr at runtime;
+it is not redistributed here.

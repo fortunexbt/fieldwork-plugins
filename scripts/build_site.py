@@ -33,6 +33,12 @@ def main():
         if source.is_file():
             copy(source, output / source.relative_to(ROOT / "site"))
     copy(ROOT / "catalog.json", output / "catalog.json")
+    page = output / "index.html"
+    inlined = json.dumps(catalog, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+    marker = '<script type="application/json" id="catalog">{"plugins":[]}</script>'
+    if marker not in page.read_text():
+        parser.error("index.html is missing the catalog placeholder")
+    page.write_text(page.read_text().replace(marker, f'<script type="application/json" id="catalog">{inlined}</script>'))
 
     for plugin in catalog["plugins"]:
         plugin_id = plugin["id"]

@@ -119,7 +119,9 @@ function startRun(plugin) {
     }
     if (current && current.id === plugin.id) paintRun(plugin, state);
   });
-  runner().postMessage({ id, type: 'run', plugin: plugin.id, demo: plugin.demo });
+  const send = () => runner().postMessage({ id, type: 'run', plugin: plugin.id, demo: plugin.demo });
+  if (document.readyState === 'complete') send();
+  else addEventListener('load', send, { once: true });
   return state;
 }
 
@@ -311,31 +313,27 @@ function navigate(offset) {
 
 window.addEventListener('hashchange', () => catalog && selectTool(location.hash.slice(1)));
 
-fetch('catalog.json').then((response) => {
-  if (!response.ok) throw new Error('The collection could not be loaded.');
-  return response.json();
-}).then((data) => {
-  catalog = data;
-  document.querySelector('#version').textContent = `${catalog.plugins.length} plugins · v${catalog.version}`;
-  for (const item of catalog.plugins) {
-    const button = element('button', 'tool-button');
-    button.dataset.id = item.id;
-    button.setAttribute('role', 'tab');
-    button.innerHTML = `<img src="icons/${escapeHtml(item.id)}.svg" alt="" width="24" height="24"><span>${escapeHtml(item.name)}<small>${escapeHtml(item.short)}</small></span>`;
-    button.onclick = () => {
-      if (location.hash.slice(1) === item.id) selectTool(item.id);
-      else location.hash = item.id;
-    };
-    button.onkeydown = (event) => {
-      const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
-      if (step) {
-        event.preventDefault();
-        navigate(step);
-      }
-    };
-    list.append(button);
-  }
-  selectTool(location.hash.slice(1));
-}).catch((error) => {
-  detail.replaceChildren(element('p', 'loading', `${error.message} The plugins are still installable from the source repository.`));
-});
+// The catalog is inlined by scripts/build_site.py so the first plugin renders
+// before the first paint, with no fetch and no layout shift.
+catalog = JSON.parse(document.querySelector('#catalog').textContent);
+document.querySelector('#version').textContent = `${catalog.plugins.length} plugins · v${catalog.version}`;
+for (const item of catalog.plugins) {
+  const button = element('button', 'tool-button');
+  button.dataset.id = item.id;
+  button.setAttribute('role', 'tab');
+  button.innerHTML = `<img src="icons/${escapeHtml(item.id)}.svg" alt="" width="24" height="24"><span>${escapeHtml(item.name)}<small>${escapeHtml(item.short)}</small></span>`;
+  button.onclick = () => {
+    if (location.hash.slice(1) === item.id) selectTool(item.id);
+    else location.hash = item.id;
+  };
+  button.onkeydown = (event) => {
+    const offset = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
+    if (offset) {
+      event.preventDefault();
+      navigate(offset);
+    }
+  };
+  list.append(button);
+}
+
+selectTool(location.hash.slice(1));

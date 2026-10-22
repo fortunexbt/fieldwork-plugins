@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "python3 scripts/build_site.py --output .artifacts/site",
+  "outputDirectory": ".artifacts/site",
+  "headers": [
+    {
+      "source": "/(fonts|icons)/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
+}

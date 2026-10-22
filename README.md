@@ -1,11 +1,18 @@
 # Fieldwork plugins
 
+**Try every tool in the browser: https://fieldwork-plugins.vercel.app**
+
 [![CI](https://github.com/fortunexbt/fieldwork-plugins/actions/workflows/ci.yml/badge.svg)](https://github.com/fortunexbt/fieldwork-plugins/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-c9a227)](LICENSE)
+
+[![The Fieldwork catalog running Tablebeam in the browser](docs/screenshot.webp)](https://fieldwork-plugins.vercel.app)
 
 Eight small plugins for ChatGPT and Codex. Each one wraps a single-file Python CLI
 (standard library, except CAD Rescue) behind a `SKILL.md`, so the agent runs a bounded,
 inspectable command instead of improvising.
+
+The catalog site is not a set of screenshots. It downloads the same script the plugin
+ships, runs it in Pyodide against sample input, and prints whatever the tool prints.
 
 | Plugin | What it does |
 | --- | --- |
@@ -35,12 +42,37 @@ plugins/<name>/
   plugin.json            portable manifest
   .codex-plugin/         Codex manifest
   skills/<name>/         SKILL.md, scripts/, synthetic examples in assets/
-scripts/                 release tooling and smoke scripts
+scripts/                 release tooling and the demo runner
 tests/                   unit tests
-site/                    catalog site, published to GitHub Pages
+samples/                 recorded inputs the browser demos cannot produce
+site/                    catalog site; site/run holds the Pyodide harness
+docs/                    README screenshot
 ```
 
-## Try it
+## In the browser
+
+Each plugin in `catalog.json` carries a `demo` block: the sample inputs to write, the
+exact argv to run, and which values from the result to show. `site/run/worker.js` boots
+Pyodide in a module worker, `site/run/harness.py` compiles the tool and executes it as
+`__main__`, and `scripts/run_demos.py` runs the same steps with a local interpreter so CI
+fails when a demo drifts from its tool.
+
+A browser withholds three things the tools use, and the harness substitutes each one
+visibly rather than faking a result:
+
+- **Hard links.** The in-memory filesystem has none, so publishing an output file falls
+  back to an exclusive create plus a byte copy. That does not share an inode, so Safe
+  Tidy's `apply` correctly refuses to run there and the demo stops at the plan.
+- **Sockets.** ShipProof's HTTP request goes through a blocking `XMLHttpRequest`. The
+  URL, the bytes and the comparison are real: it fetches a file this site actually
+  serves and hashes it against the copy committed here.
+- **FFmpeg.** Fit to Upload replays recorded output from real `ffprobe` and `ffmpeg` on
+  the committed clip, captured by `scripts/make_samples.py`. The byte budget is
+  calculated live from that metadata and the clip's real size on disk.
+
+Everything else, including CAD Rescue's `ezdxf` parsing, runs unmodified.
+
+## Try it locally
 
 Needs Python 3.11 or later. Each plugin documents its commands in its `SKILL.md`;
 for example:
@@ -65,7 +97,7 @@ python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -r requirements-dev.txt -r plugins/cad-rescue/skills/cad-rescue/requirements.txt
 python -m unittest discover -s tests
-./scripts/smoke.sh
+python scripts/run_demos.py
 ```
 
 The 81 unit tests cover all eight plugins and the release tooling. Two are skipped unless
@@ -74,9 +106,9 @@ you set `CAD_RESCUE_DWG_FIXTURE` and `CAD_RESCUE_LIBREDWG_RUNTIME`, or
 captures. The Fit to Upload tests need `ffmpeg`, and the CAD Rescue preview tests use
 `rsvg-convert`.
 
-`scripts/smoke.sh` validates every manifest and runs the bundled synthetic example for
-Frame Lab, Tablebeam, CI Spend Check, Asset Check, CAD Rescue and Safe Tidy. Fit to Upload
-and ShipProof need FFmpeg and a live URL and are not covered by it.
+`scripts/run_demos.py` parses every manifest, then runs each catalog demo end to end and
+checks that the values the site displays are actually in the result. ShipProof's step is
+served from a local loopback server; Fit to Upload's needs `ffmpeg` and `ffprobe`.
 
 CI runs the same tests on Python 3.11 and 3.13, then builds the eight release ZIPs and
 smoke-tests each one from a clean extraction (`python scripts/release.py build`,
@@ -84,9 +116,15 @@ smoke-tests each one from a clean extraction (`python scripts/release.py build`,
 
 ## Site
 
-The catalog at https://fortunexbt.github.io/fieldwork-plugins/ is built from `site/` and
-`catalog.json` by `python scripts/build_site.py` and deployed by the Pages workflow on
-each push to `main`.
+`python scripts/build_site.py` assembles `.artifacts/site` from `site/`, `catalog.json`,
+each plugin's icon and CLI, and the demo inputs. It inlines the catalog into `index.html`
+so the first plugin renders before the first paint.
+
+The site is deployed to https://fieldwork-plugins.vercel.app from `vercel.json`, and the
+Pages workflow publishes the same build to https://fortunexbt.github.io/fieldwork-plugins/
+on each push to `main`. To rebuild the sample clip and the recorded FFmpeg output, run
+`python scripts/make_samples.py`; to rebuild the Open Graph image, `node scripts/make_og.mjs`
+with Playwright installed.
 
 ## Status
 
