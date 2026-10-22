@@ -30,7 +30,65 @@
         "Help me prepare a supported local Minecraft benchmark."
       ],
       "runtime": "Python 3.11+. Live capture: supported macOS Minecraft, Java and Minescript.",
-      "entrypoint": "frame_lab.py"
+      "entrypoint": "frame_lab.py",
+      "demo": {
+        "headline": "Compare two frame captures and name the smoother one",
+        "sandbox": "browser",
+        "steps": [
+          {
+            "title": "Analyze the built-in synthetic captures",
+            "argv": [
+              "demo"
+            ],
+            "stats": [
+              {
+                "label": "Preferred run",
+                "path": "data.comparison.preferred_run"
+              },
+              {
+                "label": "Fair comparison",
+                "path": "data.comparison.comparable"
+              },
+              {
+                "label": "Frame intervals each",
+                "path": "data.comparison.runs[0].frame_intervals"
+              }
+            ],
+            "table": {
+              "path": "data.comparison.runs",
+              "columns": [
+                {
+                  "label": "Capture",
+                  "path": "run"
+                },
+                {
+                  "label": "Average FPS",
+                  "path": "average_fps"
+                },
+                {
+                  "label": "p95",
+                  "path": "p95_ms",
+                  "suffix": " ms"
+                },
+                {
+                  "label": "p99",
+                  "path": "p99_ms",
+                  "suffix": " ms"
+                },
+                {
+                  "label": "1% low",
+                  "path": "one_percent_low_fps",
+                  "suffix": " fps"
+                },
+                {
+                  "label": "Valid",
+                  "path": "valid"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "id": "fit-to-upload",
@@ -56,7 +114,84 @@
         "Check whether this video already fits a 500 MB upload limit."
       ],
       "runtime": "Python 3.11+, FFmpeg and FFprobe, with access to the selected files.",
-      "entrypoint": "fit_to_upload.py"
+      "entrypoint": "fit_to_upload.py",
+      "demo": {
+        "headline": "Budget a 390 KB clip down to a 120 KB upload limit",
+        "sandbox": "replayed",
+        "sandbox_note": "A browser cannot host FFmpeg. The probe step replays recorded output from real ffprobe and ffmpeg on this exact clip; the byte budget below is calculated live.",
+        "inputs": [
+          {
+            "path": "clip.mp4",
+            "source": "samples/fit-to-upload/clip.mp4"
+          }
+        ],
+        "recorded_binaries": "samples/fit-to-upload/recorded-binaries.json",
+        "steps": [
+          {
+            "title": "Plan the encode without writing a file",
+            "argv": [
+              "plan",
+              "--input",
+              "clip.mp4",
+              "--output",
+              "upload.mp4",
+              "--max-bytes",
+              "120000"
+            ],
+            "stats": [
+              {
+                "label": "Source",
+                "path": "data.source_bytes",
+                "format": "bytes"
+              },
+              {
+                "label": "Limit",
+                "path": "data.max_bytes",
+                "format": "bytes"
+              },
+              {
+                "label": "Plan",
+                "path": "data.action"
+              },
+              {
+                "label": "Video budget",
+                "path": "data.video_bitrate_bps",
+                "format": "bitrate"
+              }
+            ],
+            "table": {
+              "path": "data.source_streams",
+              "columns": [
+                {
+                  "label": "Stream",
+                  "path": "type"
+                },
+                {
+                  "label": "Codec",
+                  "path": "codec"
+                },
+                {
+                  "label": "Measured bitrate",
+                  "path": "bitrate_bps",
+                  "format": "bitrate"
+                },
+                {
+                  "label": "Duration",
+                  "path": "duration_seconds",
+                  "suffix": " s"
+                }
+              ]
+            },
+            "downloads": [
+              {
+                "path": "clip.mp4",
+                "label": "The sample clip",
+                "type": "video/mp4"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "tablebeam",
@@ -82,7 +217,64 @@
         "Check this CSV for missing values and ambiguous numeric columns."
       ],
       "runtime": "Python 3.11+ in a file execution environment.",
-      "entrypoint": "tablebeam.py"
+      "entrypoint": "tablebeam.py",
+      "demo": {
+        "headline": "Group a CSV with exact decimal arithmetic",
+        "sandbox": "browser",
+        "inputs": [
+          {
+            "path": "demo-sales.csv",
+            "source": "plugins/tablebeam/skills/tablebeam/assets/demo-sales.csv"
+          },
+          {
+            "path": "demo-query.json",
+            "source": "plugins/tablebeam/skills/tablebeam/assets/demo-query.json"
+          }
+        ],
+        "steps": [
+          {
+            "title": "Sum revenue per owner for the North region",
+            "argv": [
+              "query",
+              "demo-sales.csv",
+              "--spec",
+              "demo-query.json"
+            ],
+            "stats": [
+              {
+                "label": "Matched rows",
+                "path": "data.matched_row_count"
+              },
+              {
+                "label": "Groups",
+                "path": "data.result_group_count"
+              },
+              {
+                "label": "Source lines",
+                "path": "data.source_coverage.source_line_ranges.range_count",
+                "suffix": " ranges"
+              }
+            ],
+            "table": {
+              "path": "data.result_rows",
+              "columns": [
+                {
+                  "label": "Owner",
+                  "path": "group.owner"
+                },
+                {
+                  "label": "Revenue sum",
+                  "path": "value"
+                },
+                {
+                  "label": "Rows",
+                  "path": "rows"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "id": "shipproof",
@@ -108,7 +300,70 @@
         "Create a handoff for this repository without exporting secrets."
       ],
       "runtime": "Python 3.11+, network access for URL checks, Git for repository handoffs.",
-      "entrypoint": "shipproof.py"
+      "entrypoint": "shipproof.py",
+      "demo": {
+        "headline": "Check that a deployed file matches the committed copy",
+        "sandbox": "network",
+        "sandbox_note": "This downloads a real file from this site over HTTP and hashes it against the copy committed in the repository. Python has no sockets in a browser, so the request goes through XMLHttpRequest; the comparison is the tool's own.",
+        "inputs": [
+          {
+            "path": "app.js",
+            "source": "plugins/shipproof/skills/shipproof/examples/release/assets/app.js"
+          }
+        ],
+        "steps": [
+          {
+            "title": "Fetch the served asset and compare it with the expected bytes",
+            "argv": [
+              "verify",
+              "--url",
+              "{{site}}samples/shipproof/app.js",
+              "--asset",
+              "app.js",
+              "--marker",
+              "demo-release-2026-09"
+            ],
+            "stats": [
+              {
+                "label": "Verdict",
+                "path": "data.resources[0].result"
+              },
+              {
+                "label": "HTTP status",
+                "path": "data.resources[0].status_code"
+              },
+              {
+                "label": "Evidence checks",
+                "path": "data.resources[0].checks",
+                "format": "count"
+              }
+            ],
+            "table": {
+              "path": "data.resources[0].checks",
+              "columns": [
+                {
+                  "label": "Check",
+                  "path": "check"
+                },
+                {
+                  "label": "Result",
+                  "path": "result"
+                },
+                {
+                  "label": "Expected",
+                  "path": "expected",
+                  "truncate": 24
+                },
+                {
+                  "label": "Served",
+                  "path": "actual",
+                  "truncate": 24
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "id": "safe-tidy",
@@ -134,7 +389,125 @@
         "Undo the unchanged moves in this Safe Tidy receipt."
       ],
       "runtime": "Python 3.11+ with access to the chosen local directory.",
-      "entrypoint": "safe_tidy.py"
+      "entrypoint": "safe_tidy.py",
+      "demo": {
+        "headline": "Find duplicate files and write a reviewable move plan",
+        "sandbox": "browser",
+        "sandbox_note": "Applying a plan needs hard links, which the browser's in-memory filesystem does not have, so this demo stops at the plan. Installed locally, apply writes an undo receipt before it moves anything.",
+        "creates": [
+          {
+            "path": "inbox/notes.txt",
+            "text": "a synthetic note\n"
+          },
+          {
+            "path": "inbox/notes-copy.txt",
+            "text": "a synthetic note\n"
+          },
+          {
+            "path": "inbox/totals.csv",
+            "text": "item,total\nexample,12\n"
+          },
+          {
+            "path": "inbox/read-me.md",
+            "text": "# Sample inbox\n\nThree files, one exact duplicate.\n"
+          }
+        ],
+        "steps": [
+          {
+            "title": "Hash every direct file and group exact duplicates",
+            "argv": [
+              "inventory",
+              "--root",
+              "inbox"
+            ],
+            "stats": [
+              {
+                "label": "Files hashed",
+                "path": "data.files_scanned"
+              },
+              {
+                "label": "Bytes hashed",
+                "path": "data.bytes_hashed",
+                "format": "bytes"
+              },
+              {
+                "label": "Duplicate groups",
+                "path": "data.duplicate_groups",
+                "format": "count"
+              }
+            ],
+            "table": {
+              "path": "data.files",
+              "columns": [
+                {
+                  "label": "File",
+                  "path": "path"
+                },
+                {
+                  "label": "Bytes",
+                  "path": "size_bytes"
+                },
+                {
+                  "label": "SHA-256",
+                  "path": "sha256",
+                  "truncate": 12
+                }
+              ]
+            }
+          },
+          {
+            "title": "Write the move plan without moving anything",
+            "argv": [
+              "plan",
+              "--root",
+              "inbox",
+              "--output",
+              "plan.json"
+            ],
+            "stats": [
+              {
+                "label": "Planned moves",
+                "path": "data.moves",
+                "format": "count"
+              },
+              {
+                "label": "Conflicts",
+                "path": "data.conflicts",
+                "format": "count"
+              },
+              {
+                "label": "Plan SHA-256",
+                "path": "data.plan_sha256",
+                "truncate": 12
+              }
+            ],
+            "table": {
+              "path": "data.moves",
+              "columns": [
+                {
+                  "label": "Source",
+                  "path": "source"
+                },
+                {
+                  "label": "Proposed destination",
+                  "path": "destination"
+                },
+                {
+                  "label": "Bytes",
+                  "path": "size_bytes"
+                }
+              ]
+            },
+            "downloads": [
+              {
+                "path": "plan.json",
+                "label": "The plan file",
+                "type": "application/json"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "cad-rescue",
@@ -161,7 +534,106 @@
       ],
       "runtime": "Python 3.11+ and ezdxf. DWG additionally requires Node.js and the documented LibreDWG Web runtime.",
       "entrypoint": "cad_rescue.py",
-      "license": "GPL-3.0-only"
+      "license": "GPL-3.0-only",
+      "demo": {
+        "headline": "Open a DXF floor plan and draw a preview from its geometry",
+        "sandbox": "browser",
+        "sandbox_note": "DXF parsing needs ezdxf, so the first run downloads that package into the browser. It takes a few seconds once.",
+        "requires": [
+          "ezdxf==1.4.5"
+        ],
+        "inputs": [
+          {
+            "path": "demo-plan.dxf",
+            "source": "plugins/cad-rescue/skills/cad-rescue/assets/demo-plan.dxf"
+          }
+        ],
+        "steps": [
+          {
+            "title": "Inspect the drawing",
+            "argv": [
+              "inspect",
+              "--input",
+              "demo-plan.dxf"
+            ],
+            "stats": [
+              {
+                "label": "Entities",
+                "path": "data.entity_count"
+              },
+              {
+                "label": "Layers",
+                "path": "data.layers",
+                "format": "count"
+              },
+              {
+                "label": "Units",
+                "path": "data.units.name"
+              },
+              {
+                "label": "Parser",
+                "path": "data.parser.version",
+                "prefix": "ezdxf "
+              }
+            ],
+            "table": {
+              "path": "data.layers",
+              "columns": [
+                {
+                  "label": "Layer",
+                  "path": "_key"
+                },
+                {
+                  "label": "Entities",
+                  "path": "entities"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Render an SVG preview",
+            "argv": [
+              "preview",
+              "--input",
+              "demo-plan.dxf",
+              "--output",
+              "plan.svg"
+            ],
+            "stats": [
+              {
+                "label": "Paths written",
+                "path": "data.paths_written"
+              },
+              {
+                "label": "Preview bytes",
+                "path": "data.receipt.size_bytes",
+                "format": "bytes"
+              },
+              {
+                "label": "SHA-256",
+                "path": "data.receipt.sha256",
+                "truncate": 12
+              }
+            ],
+            "image": {
+              "path": "plan.svg",
+              "caption": "Drawn from the DXF entities, in your browser"
+            },
+            "downloads": [
+              {
+                "path": "plan.svg",
+                "label": "The generated SVG",
+                "type": "image/svg+xml"
+              },
+              {
+                "path": "demo-plan.dxf",
+                "label": "The source DXF",
+                "type": "image/vnd.dxf"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "ci-spend-check",
@@ -187,7 +659,69 @@
         "Show which CI workflows deserve attention and link the evidence."
       ],
       "runtime": "Python 3.11+. Live GitHub reads use an already authenticated GitHub CLI.",
-      "entrypoint": "ci_spend_check.py"
+      "entrypoint": "ci_spend_check.py",
+      "demo": {
+        "headline": "Read exported GitHub Actions runs and find the repeated failures",
+        "sandbox": "browser",
+        "inputs": [
+          {
+            "path": "sample-runs.json",
+            "source": "plugins/ci-spend-check/skills/ci-spend-check/assets/sample-runs.json"
+          }
+        ],
+        "steps": [
+          {
+            "title": "Analyze the exported run history",
+            "argv": [
+              "analyze",
+              "sample-runs.json"
+            ],
+            "stats": [
+              {
+                "label": "Run attempts",
+                "path": "data.runs_analyzed"
+              },
+              {
+                "label": "Workflows",
+                "path": "data.workflows",
+                "format": "count"
+              },
+              {
+                "label": "Input SHA-256",
+                "path": "data.input_sha256",
+                "truncate": 12
+              }
+            ],
+            "table": {
+              "path": "data.workflows",
+              "columns": [
+                {
+                  "label": "Workflow",
+                  "path": "name"
+                },
+                {
+                  "label": "Attempts",
+                  "path": "runs"
+                },
+                {
+                  "label": "Failed",
+                  "path": "failed_runs"
+                },
+                {
+                  "label": "Run elapsed",
+                  "path": "run_elapsed_minutes",
+                  "suffix": " min"
+                },
+                {
+                  "label": "Job time",
+                  "path": "measured_job_minutes",
+                  "suffix": " min"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "id": "asset-check",
@@ -213,7 +747,85 @@
         "Find missing textures and unsupported extensions in this 3D export."
       ],
       "runtime": "Python 3.11+ with access to the selected glTF/GLB and its local resources.",
-      "entrypoint": "asset_check.py"
+      "entrypoint": "asset_check.py",
+      "demo": {
+        "headline": "Measure a glTF export against explicit budgets",
+        "sandbox": "browser",
+        "inputs": [
+          {
+            "path": "tiny-scene.gltf",
+            "source": "plugins/asset-check/skills/asset-check/assets/tiny-scene.gltf"
+          }
+        ],
+        "steps": [
+          {
+            "title": "Inspect the scene and write an HTML report",
+            "argv": [
+              "inspect",
+              "--input",
+              "tiny-scene.gltf",
+              "--max-triangles",
+              "1",
+              "--max-bytes",
+              "4096",
+              "--report",
+              "asset-report.html"
+            ],
+            "stats": [
+              {
+                "label": "Triangle candidates",
+                "path": "data.budgets.triangles.measured"
+              },
+              {
+                "label": "Asset bytes",
+                "path": "data.file_footprint.total_asset_bytes",
+                "format": "bytes"
+              },
+              {
+                "label": "Materials",
+                "path": "data.materials.material_count"
+              },
+              {
+                "label": "Structure",
+                "path": "data.validation.structure"
+              }
+            ],
+            "table": {
+              "path": "data.budgets",
+              "columns": [
+                {
+                  "label": "Budget",
+                  "path": "_key"
+                },
+                {
+                  "label": "Measured",
+                  "path": "measured"
+                },
+                {
+                  "label": "Limit",
+                  "path": "limit"
+                },
+                {
+                  "label": "Result",
+                  "path": "result"
+                },
+                {
+                  "label": "Counted from",
+                  "path": "basis",
+                  "truncate": 60
+                }
+              ]
+            },
+            "downloads": [
+              {
+                "path": "asset-report.html",
+                "label": "The generated report",
+                "type": "text/html"
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,4 +1,4 @@
-ezdxf==1.4.4
+ezdxf==1.4.5
 jsonschema==4.26.0
 PyYAML==6.0.3
 ruff==0.16.8
