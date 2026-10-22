@@ -24,7 +24,7 @@ writeFileSync(scratch, `<!doctype html><html lang="en"><head><meta charset="utf-
 <div class="mark"><svg viewBox="0 0 24 24"><path d="M3 4h18M3 12h12M3 20h6"/></svg>Fieldwork</div>
 <div><h1>Eight small tools. Run the real code here.</h1>
 <p class="sub">Plugins for ChatGPT and Codex. Each one is a single Python file, and the site runs it in your browser.</p></div>
-<div class="strip"><code>$ python tablebeam.py query demo-sales.csv --spec demo-query.json</code><span>ok &middot; 11 ms</span></div>
+<div class="strip"><code>$ python tablebeam.py query penguins.csv --spec penguins-query.json</code><span>ok &middot; 3 groups, 342 rows</span></div>
 </body></html>`);
 
 const browser = await chromium.launch();

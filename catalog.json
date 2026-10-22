@@ -82,10 +82,6 @@
                 "path": "data.valid"
               },
               {
-                "label": "Reason",
-                "path": "data.invalid_reasons[0]"
-              },
-              {
                 "label": "Frame intervals",
                 "path": "data.frame_intervals"
               },
@@ -103,7 +99,16 @@
                 "path": "data.one_percent_low_fps",
                 "suffix": " fps"
               }
-            ]
+            ],
+            "table": {
+              "path": "data.invalid_reasons",
+              "columns": [
+                {
+                  "label": "Why it cannot be ranked",
+                  "path": ""
+                }
+              ]
+            }
           }
         ]
       }
@@ -140,7 +145,7 @@
         "input": {
           "about": "Five seconds of Big Buck Bunny (2:00 to 2:05), cut from the 320x180 release with stream copy, so every frame is the original encode.",
           "credit": "© Blender Foundation, CC BY 3.0.",
-          "url": "https://peach.blender.org/"
+          "url": "https://peach.blender.org/about/"
         },
         "inputs": [
           {
@@ -247,7 +252,7 @@
         "sandbox_note": "Two penguins have NA for body mass. Tablebeam reads NA as text, not as a missing value, so the query drops those rows by name instead of guessing.",
         "input": {
           "about": "Palmer Penguins: 344 penguins measured at Palmer Station, Antarctica, 2007 to 2009.",
-          "credit": "Horst, Hill and Gorman; data collected by Gorman, Williams and Fraser. CC0.",
+          "credit": "Horst, Hill and Gorman; data collected by Kristen Gorman and Palmer Station LTER. CC0.",
           "url": "https://github.com/allisonhorst/palmerpenguins"
         },
         "inputs": [
