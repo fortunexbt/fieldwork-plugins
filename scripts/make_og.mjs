@@ -11,20 +11,24 @@ const catalog = JSON.parse(readFileSync(new URL('../catalog.json', import.meta.u
 writeFileSync(scratch, `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <link rel="stylesheet" href="style.css">
 <style>
-  body { width: 1200px; height: 630px; display: flex; flex-direction: column; justify-content: space-between; padding: 64px 72px; }
-  .mark { display: flex; align-items: center; gap: 14px; font-size: 30px; font-weight: 700; letter-spacing: -0.03em; }
-  .mark svg { width: 30px; height: 30px; fill: none; stroke: var(--accent); stroke-width: 3; }
-  h1 { font-size: 86px; line-height: .98; letter-spacing: -0.04em; max-width: 17ch; }
-  .sub { margin-top: 22px; font-size: 24px; color: var(--quiet); max-width: 44ch; }
-  .strip { display: flex; align-items: center; justify-content: space-between; gap: 28px;
-           background: var(--panel); color: var(--panel-ink); border-radius: 14px; padding: 20px 26px; }
-  .strip code { font-family: var(--mono); font-size: 19px; color: var(--accent-lit); }
-  .strip span { font-family: var(--mono); font-size: 16px; color: var(--panel-quiet); white-space: nowrap; }
+  body { width: 1200px; height: 630px; display: grid; grid-template-columns: 1fr 560px; gap: 56px; padding: 60px 64px 0; overflow: hidden; }
+  .mark { display: flex; align-items: center; gap: 12px; font-family: var(--narrow); font-size: 30px; font-weight: 600; }
+  .mark svg { width: 28px; height: 28px; fill: none; stroke: var(--ink); stroke-width: 3.4; }
+  h1 { margin-top: 64px; font-family: var(--narrow); font-size: 64px; line-height: 1.02; letter-spacing: -0.01em; }
+  .sub { margin-top: 22px; font-size: 24px; line-height: 1.35; color: var(--quiet); max-width: 26ch; }
+  .tape { margin: 0 14px; padding: 30px 30px 40px; }
+  .tape code { display: block; font-family: var(--mono); font-size: 15px; line-height: 1.5; padding: 10px 12px; background: var(--paper-wash); }
+  .tape h2 { font-family: var(--narrow); font-size: 34px; margin-bottom: 18px; }
+  .readout { margin-top: 18px; grid-template-columns: 1fr; }
+  .readout dt { font-size: 19px; }
+  .readout dd { font-size: 18px; }
 </style></head><body>
-<div class="mark"><svg viewBox="0 0 24 24"><path d="M3 4h18M3 12h12M3 20h6"/></svg>Fieldwork</div>
-<div><h1>Eight small tools. Run the real code here.</h1>
-<p class="sub">Plugins for ChatGPT and Codex. Each one is a single Python file, and the site runs it in your browser.</p></div>
-<div class="strip"><code>$ python tablebeam.py query penguins.csv --spec penguins-query.json</code><span>ok &middot; 3 groups, 342 rows</span></div>
+<div><div class="mark"><svg viewBox="0 0 24 24"><path d="M3 4h18M3 12h12M3 20h6"/></svg>Fieldwork</div>
+<h1>Eight small tools for ChatGPT and Codex</h1>
+<p class="sub">Each one is a single Python file, and the site runs it in your browser on real data.</p></div>
+<div class="printer"><div class="slot"></div><div class="tape"><h2>Tablebeam</h2>
+<code>$ python tablebeam.py query penguins.csv --spec penguins-query.json</code>
+<dl class="readout"><div><dt>Matched rows</dt><dd>342</dd></div><div><dt>Groups</dt><dd>3</dd></div><div><dt>Adelie, mean body mass</dt><dd>558800/151 g</dd></div><div><dt>Gentoo, mean body mass</dt><dd>624350/123 g</dd></div></dl></div></div>
 </body></html>`);
 
 const browser = await chromium.launch();
