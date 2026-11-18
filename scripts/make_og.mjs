@@ -17,7 +17,7 @@ writeFileSync(scratch, `<!doctype html><html lang="en"><head><meta charset="utf-
   h1 { margin-top: 64px; font-family: var(--narrow); font-size: 64px; line-height: 1.02; letter-spacing: -0.01em; }
   .sub { margin-top: 22px; font-size: 24px; line-height: 1.35; color: var(--quiet); max-width: 26ch; }
   .tape { margin: 0 14px; padding: 30px 30px 40px; }
-  .tape code { display: block; font-family: var(--mono); font-size: 15px; line-height: 1.5; padding: 10px 12px; background: var(--paper-wash); border-left: 3px solid var(--accent); }
+  .tape code { display: block; font-family: var(--mono); font-size: 15px; line-height: 1.5; padding: 10px 12px; background: var(--paper-wash); }
   .tape h2 { font-family: var(--narrow); font-size: 34px; margin-bottom: 18px; }
   .readout { margin-top: 18px; grid-template-columns: 1fr; }
   .readout dt { font-size: 19px; }

@@ -344,13 +344,12 @@ main { max-width: 1360px; margin: auto; padding: 0 var(--gutter); }
   margin-top: 8px;
   padding: 9px 12px;
   background: var(--paper-wash);
-  border-left: 3px solid var(--accent);
   font-family: var(--mono);
   font-size: 12.5px;
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
-.step-command::before { content: '$ '; color: var(--paper-quiet); }
+.step-command::before { content: '$ '; color: var(--accent); font-weight: 600; }
 .step-meta {
   display: flex;
   align-items: center;
