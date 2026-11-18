@@ -62,6 +62,8 @@
   color-scheme: light;
   font-family: var(--sans);
   font-synthesis: none;
+  /* Barlow's standard ligatures fuse "--" into a dash, which misprints command flags. */
+  font-variant-ligatures: no-common-ligatures;
 }
 
 * { box-sizing: border-box; }
@@ -403,7 +405,7 @@ main { max-width: 1360px; margin: auto; padding: 0 var(--gutter); }
 .evidence th, .evidence td { text-align: left; padding: 7px 14px 7px 0; white-space: nowrap; }
 .evidence th { font-size: 13px; font-weight: 600; color: var(--paper-quiet); }
 .evidence td { font-family: var(--mono); border-top: 1px solid var(--paper-rule); }
-.evidence td:first-child { font-family: var(--sans); font-weight: 500; font-size: 14px; }
+.evidence td:first-child { font-family: var(--sans); font-weight: 500; font-size: 14px; white-space: normal; min-width: 14ch; overflow-wrap: anywhere; }
 
 .step-figure { margin: 16px 0 0; }
 .step-figure img {
