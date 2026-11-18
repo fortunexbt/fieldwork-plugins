@@ -52,8 +52,8 @@ noted.
   author's [minecraft-apple-silicon-framework](https://github.com/fortunexbt/minecraft-apple-silicon-framework)
   (MIT), recorded on 2026-10-06 with Minecraft 26.3.
 
-The catalog site bundles two typefaces under the SIL Open Font License 1.1:
-[DM Sans](https://fonts.google.com/specimen/DM+Sans) by Colophon Foundry, Jonny Pinhorn
-and Indian Type Foundry, and [IBM Plex Mono](https://github.com/IBM/plex) by IBM. The
+The catalog site bundles two typeface families under the SIL Open Font License 1.1:
+[Barlow](https://github.com/jpt/barlow) (Barlow and Barlow Semi Condensed) by Jeremy
+Tribby, and [IBM Plex Mono](https://github.com/IBM/plex) by IBM. The
 Latin subsets in `site/fonts/` came from Google Fonts unchanged. To run a tool in the
 page the site loads [Pyodide](https://pyodide.org) (MPL-2.0) from jsDelivr at runtime.

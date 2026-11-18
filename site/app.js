@@ -1,5 +1,6 @@
 const list = document.querySelector('#tool-list');
 const detail = document.querySelector('#tool-detail');
+const about = document.querySelector('#tool-about');
 const toast = document.querySelector('#toast');
 const INDEX = /^(.*?)\[(\d+)\]$/;
 const SANDBOX = {
@@ -12,6 +13,7 @@ let catalog;
 let current;
 let toastTimer;
 const runs = new Map();
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const element = (tag, className, text) => {
@@ -101,7 +103,8 @@ function runner() {
 }
 
 function startRun(plugin) {
-  const state = { status: 'running', stage: 'Starting Python', steps: [], started: performance.now() };
+  const previous = runs.get(plugin.id);
+  const state = { status: 'running', stage: 'Starting Python', steps: [], started: performance.now(), stale: previous ? previous.steps : [] };
   runs.set(plugin.id, state);
   const id = `${plugin.id}:${Date.now()}`;
   pending.set(id, (message) => {
@@ -131,14 +134,14 @@ function commandLine(plugin, argv) {
   return `python ${plugin.entrypoint} ${argv.map((value) => (/[\s"]/.test(value) ? JSON.stringify(value) : value)).join(' ')}`;
 }
 
-function statGrid(step, payload) {
-  const grid = element('div', 'stat-grid');
+function readout(step, payload) {
+  const list = element('dl', 'readout');
   for (const stat of step.stats || []) {
-    const cell = element('div', 'stat');
-    cell.append(element('span', null, stat.label), element('strong', null, present(resolve(payload, stat.path), stat)));
-    grid.append(cell);
+    const row = element('div');
+    row.append(element('dt', null, stat.label), element('dd', null, present(resolve(payload, stat.path), stat)));
+    list.append(row);
   }
-  return grid;
+  return list;
 }
 
 function evidenceTable(step, payload) {
@@ -164,7 +167,7 @@ function evidenceTable(step, payload) {
 
 function fileLink(file, item) {
   const url = URL.createObjectURL(new Blob([file], { type: item.type || 'application/octet-stream' }));
-  const link = element('a', 'file-link', `${item.label} ↗`);
+  const link = element('a', 'file-link', item.label);
   link.href = url;
   link.download = item.path;
   if (item.type === 'text/html' || item.type === 'image/svg+xml') {
@@ -187,12 +190,12 @@ function stepBlock(plugin, message) {
   const status = payload ? payload.status : 'error';
   const meta = element('p', `step-meta is-${status.replace('_', '-')}`);
   meta.append(element('span', 'pill', status.replace('_', ' ')));
-  meta.append(element('span', null, `exit ${message.outcome.exit} · ${message.outcome.ms} ms`));
+  meta.append(element('span', null, `exit ${message.outcome.exit}`), element('span', null, `${message.outcome.ms} ms`));
   block.append(meta);
 
   if (payload) {
     block.append(element('p', 'step-summary', payload.summary));
-    if (step.stats) block.append(statGrid(step, payload));
+    if (step.stats) block.append(readout(step, payload));
     if (step.table) {
       const table = evidenceTable(step, payload);
       if (table) block.append(table);
@@ -228,12 +231,23 @@ function paintRun(plugin, state) {
   const button = detail.querySelector('#run-button');
   if (!output) return;
   button.disabled = state.status === 'running';
-  button.textContent = state.status === 'running' ? 'Running…' : 'Run it again';
+  button.textContent = state.status === 'running' ? 'Running' : 'Run again';
   if (state.status === 'running') status.textContent = `${state.stage}…`;
   else if (state.status === 'failed') status.textContent = `The run failed: ${state.error}`;
   else status.textContent = `Finished in ${state.elapsed} ms, CPython 3.14 compiled to WebAssembly.`;
   status.className = `run-status is-${state.status}`;
-  output.replaceChildren(...state.steps.map((message) => stepBlock(plugin, message)));
+  // A repeat run keeps the last printout on the tape, greyed, until the new one lands.
+  const stale = state.status === 'running' && !state.steps.length;
+  output.classList.toggle('is-stale', stale);
+  output.replaceChildren(...(stale ? state.stale : state.steps).map((message) => stepBlock(plugin, message)));
+  if (state.status === 'done' && !state.printed) {
+    state.printed = true;
+    if (!reducedMotion.matches) {
+      output.classList.remove('printing');
+      void output.offsetWidth;
+      output.classList.add('printing');
+    }
+  }
 }
 
 /* ---------- rendering one plugin ---------- */
@@ -265,37 +279,45 @@ function selectTool(id) {
 
   const marketplace = `codex plugin marketplace add fortunexbt/fieldwork-plugins`;
   detail.innerHTML = `
-    <div class="detail-top">
-      <p class="detail-kicker"><img src="icons/${escapeHtml(item.id)}.svg" alt="" width="22" height="22">${escapeHtml(item.category)}</p>
-      <p class="sandbox-badge">${escapeHtml(SANDBOX[item.demo.sandbox])}</p>
-    </div>
-    <h2>${escapeHtml(item.name)}</h2>
-    <p class="detail-summary">${escapeHtml(item.description)}</p>
-    <div class="runner">
-      <div class="runner-head">
-        <p class="runner-headline">${escapeHtml(item.demo.headline)}</p>
-        <button class="primary-button" id="run-button">Run it</button>
+    <header class="tape-head">
+      <img src="icons/${escapeHtml(item.id)}.svg" alt="" width="34" height="34">
+      <div>
+        <h2>${escapeHtml(item.name)}</h2>
+        <p class="tape-kind">${escapeHtml(item.category)}<span class="sandbox-badge">${escapeHtml(SANDBOX[item.demo.sandbox])}</span></p>
       </div>
-      <p class="input-credit"><span>Input</span>${escapeHtml(item.demo.input.about)} ${escapeHtml(item.demo.input.credit)} <a href="${escapeHtml(item.demo.input.url)}">Source&nbsp;↗</a></p>
-      <p class="run-status" id="run-status" role="status">Ready when you are.</p>
-      <div id="console"></div>
-      ${item.demo.sandbox_note ? `<p class="sandbox-note">${escapeHtml(item.demo.sandbox_note)}</p>` : ''}
+      <button class="run-button" id="run-button">Run it</button>
+    </header>
+    <p class="runner-headline">${escapeHtml(item.demo.headline)}</p>
+    <p class="run-status" id="run-status" role="status">Ready when you are.</p>
+    <div id="console"></div>
+    <footer class="tape-foot">
+      <p class="input-credit"><strong>Input</strong> ${escapeHtml(item.demo.input.about)} ${escapeHtml(item.demo.input.credit)} <a href="${escapeHtml(item.demo.input.url)}">Source</a></p>
+      ${item.demo.sandbox_note ? `<p class="sandbox-note"><strong>In the browser</strong> ${escapeHtml(item.demo.sandbox_note)}</p>` : ''}
+    </footer>`;
+  about.innerHTML = `
+    <div class="about-text">
+      <h2>${escapeHtml(item.name)}</h2>
+      <p>${escapeHtml(item.description)}</p>
+      <p class="about-runtime">Runtime: ${escapeHtml(item.runtime)}</p>
+      <a class="file-link" href="${escapeHtml(catalog.repository)}/blob/main/plugins/${escapeHtml(item.id)}/skills/${escapeHtml(item.id)}/SKILL.md">Read the skill</a>
     </div>
     <div class="install">
       <h3>Install it in Codex</h3>
       <div id="install-commands"></div>
-      <p class="install-note">Start a new chat after installing. In the desktop app the collection appears under Plugins. Runtime: ${escapeHtml(item.runtime)}</p>
-      <div class="file-row">
-        <a class="file-link" href="${escapeHtml(catalog.repository)}/blob/main/plugins/${escapeHtml(item.id)}/skills/${escapeHtml(item.id)}/SKILL.md">Read the skill ↗</a>
+      <p class="install-note">Start a new chat after installing. In the desktop app the collection appears under Plugins.</p>
+      <div class="prompt-row">
+        <p><strong>Then ask for it</strong>${escapeHtml(item.prompts[0])}</p>
+        <button id="copy-prompt">Copy prompt</button>
       </div>
-    </div>
-    <div class="prompt-row">
-      <p><strong>Then ask for it</strong>${escapeHtml(item.prompts[0])}</p>
-      <button id="copy-prompt">Copy prompt</button>
     </div>`;
-  detail.querySelector('#install-commands').append(commandBlock(marketplace), commandBlock(`codex plugin add ${item.id}@${catalog.name}`));
-  detail.querySelector('#copy-prompt').onclick = () => copyText(item.prompts[0]);
+  about.querySelector('#install-commands').append(commandBlock(marketplace), commandBlock(`codex plugin add ${item.id}@${catalog.name}`));
+  about.querySelector('#copy-prompt').onclick = () => copyText(item.prompts[0]);
   detail.querySelector('#run-button').onclick = () => paintRun(item, startRun(item));
+  if (!reducedMotion.matches) {
+    detail.classList.remove('feeding');
+    void detail.offsetWidth;
+    detail.classList.add('feeding');
+  }
 
   const state = runs.get(item.id);
   paintRun(item, state || startRun(item));
@@ -313,14 +335,15 @@ window.addEventListener('hashchange', () => catalog && selectTool(location.hash.
 // The catalog is inlined by scripts/build_site.py so the first plugin renders
 // before the first paint, with no fetch and no layout shift.
 catalog = JSON.parse(document.querySelector('#catalog').textContent);
-document.querySelector('#version').textContent = `${catalog.plugins.length} plugins · v${catalog.version}`;
+document.querySelector('#version').textContent = `Version ${catalog.version}`;
 for (const item of catalog.plugins) {
   const button = element('button', 'tool-button');
   button.dataset.id = item.id;
   button.id = `tab-${item.id}`;
   button.setAttribute('role', 'tab');
   button.setAttribute('aria-controls', 'tool-detail');
-  button.innerHTML = `<img src="icons/${escapeHtml(item.id)}.svg" alt="" width="24" height="24"><span>${escapeHtml(item.name)}<small>${escapeHtml(item.short)}</small></span>`;
+  button.style.setProperty('--led', item.color);
+  button.innerHTML = `<img src="icons/${escapeHtml(item.id)}.svg" alt="" width="26" height="26"><i class="led" aria-hidden="true"></i><span>${escapeHtml(item.name)}<small>${escapeHtml(item.short)}</small></span>`;
   button.onclick = () => {
     if (location.hash.slice(1) === item.id) selectTool(item.id);
     else location.hash = item.id;
